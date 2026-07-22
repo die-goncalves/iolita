@@ -2,7 +2,13 @@ import { definePreset } from '@pandacss/dev'
 import tokens from './tokens'
 
 const preset = definePreset({
-	name: '@iolita/preset',
+  name: '@iolita/preset',
+  conditions: {
+		extend: {
+			notDisabled:
+				'&:not(:is(:disabled, [disabled], [data-disabled], [aria-disabled=true]))'
+		}
+	},
 	theme: {
 		extend: {
 			tokens: {
