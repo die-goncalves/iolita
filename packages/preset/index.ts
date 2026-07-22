@@ -1,4 +1,5 @@
 import { definePreset } from '@pandacss/dev'
+import recipes from './recipes'
 import tokens from './tokens'
 
 const preset = definePreset({
@@ -11,6 +12,9 @@ const preset = definePreset({
 	},
 	theme: {
 		extend: {
+			recipes: {
+				button: recipes.buttonRecipe
+			},
 			tokens: {
 				easings: tokens.easings
 			}
