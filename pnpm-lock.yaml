@@ -300,6 +300,12 @@ importers:
       '@iolita/styled-system':
         specifier: workspace:*
         version: link:../styled-system
+      '@zag-js/core':
+        specifier: ^1.43.0
+        version: 1.43.0
+      '@zag-js/react':
+        specifier: ^1.43.0
+        version: 1.43.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       react:
         specifier: ^19.2.7
         version: 19.2.7
@@ -1515,6 +1521,27 @@ packages:
   '@webcontainer/env@1.1.1':
     resolution: {integrity: sha512-6aN99yL695Hi9SuIk1oC88l9o0gmxL1nGWWQ/kNy81HigJ0FoaoTXpytCj6ItzgyCEwA9kF1wixsTuv5cjsgng==}
 
+  '@zag-js/core@1.43.0':
+    resolution: {integrity: sha512-iIpTu/U1OHKXGjXq/bn/ek32nIKE0lmS2gLdihYmv1jtPXH8hVHaIOXR5KYGfOjMVb4+FiMMCZHlH9MWbLk2iA==}
+
+  '@zag-js/dom-query@1.43.0':
+    resolution: {integrity: sha512-yQDR00jJj0tgrRH43QJx7NtQH+EBxQtEdFKMzG7c88xL1ZRtqXYpqNNSmCuGj5RTsEceQjEhAxeTJikUYp9M0g==}
+
+  '@zag-js/react@1.43.0':
+    resolution: {integrity: sha512-UGgZcPZw69p5DUE0XiUBdPHK8m/JmsRD8RC/DRHMKyAlrYqKxzp7TKhheCeJ52ZwXMG/QryUA6TWEBOVuYG1Tg==}
+    peerDependencies:
+      react: '>=18.0.0'
+      react-dom: '>=18.0.0'
+
+  '@zag-js/store@1.43.0':
+    resolution: {integrity: sha512-Q6b6vbAbIGDkXO1sGoM+hjOP2BL6uHIMX3MUhpjFpIZ6qhkxU+iRa8bCGU7xYT2vRyEMlN5NUU77PjoITpSwRg==}
+
+  '@zag-js/types@1.43.0':
+    resolution: {integrity: sha512-pheZyCiVjJaXBzbfoj/gMKXkZUo1D5JWd46QVYWonHJZIdUfDRDwBvDKcXGIHmpuq7fJrnGXbegAk0+D2aa4bw==}
+
+  '@zag-js/utils@1.43.0':
+    resolution: {integrity: sha512-ZxkL+AuKRv/UGmmp5iZwmzfcVV7iWiDIrhYiMrKDKPJGdIPIFpMOisM+bTKYVkvn0jmCZV0CTF0jJm29hEV+LQ==}
+
   accepts@2.0.0:
     resolution: {integrity: sha512-5cvg6CtKwfgdmVqY1WIiXKc3Q1bkRqGLi+2W/6ao+6Y7gu/RCwRuAhGEzh5B4KlszSuTLgZYuqFqo5bImjNKng==}
     engines: {node: '>= 0.6'}
@@ -2652,6 +2679,9 @@ packages:
   proxy-addr@2.0.7:
     resolution: {integrity: sha512-llQsMLSUDUPT44jdrU/O37qlnifitDP+ZwrmmZcoSKyLKvtZxpyV0n2/bD/N4tBAAZ/gJEdZU7KMraoK1+XYAg==}
     engines: {node: '>= 0.10'}
+
+  proxy-compare@3.0.1:
+    resolution: {integrity: sha512-V9plBAt3qjMlS1+nC8771KNf6oJ12gExvaxnNzN/9yVRLdTv/lc+oJlnSzrdYDAvBfTStPCoiaCOTmTs0adv7Q==}
 
   qs@6.15.3:
     resolution: {integrity: sha512-O9gl3zCl5h5blw1KGUzQKhA5oUXSl8rwUIM5o0S3nCXMliSvy5Dzx7/DJcI+SwgICv+IneSZwhBh1oSyEHA71A==}
@@ -4458,6 +4488,34 @@ snapshots:
 
   '@webcontainer/env@1.1.1': {}
 
+  '@zag-js/core@1.43.0':
+    dependencies:
+      '@zag-js/dom-query': 1.43.0
+      '@zag-js/utils': 1.43.0
+
+  '@zag-js/dom-query@1.43.0':
+    dependencies:
+      '@zag-js/types': 1.43.0
+
+  '@zag-js/react@1.43.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)':
+    dependencies:
+      '@zag-js/core': 1.43.0
+      '@zag-js/store': 1.43.0
+      '@zag-js/types': 1.43.0
+      '@zag-js/utils': 1.43.0
+      react: 19.2.7
+      react-dom: 19.2.7(react@19.2.7)
+
+  '@zag-js/store@1.43.0':
+    dependencies:
+      proxy-compare: 3.0.1
+
+  '@zag-js/types@1.43.0':
+    dependencies:
+      csstype: 3.2.3
+
+  '@zag-js/utils@1.43.0': {}
+
   accepts@2.0.0:
     dependencies:
       mime-types: 3.0.2
@@ -5446,6 +5504,8 @@ snapshots:
     dependencies:
       forwarded: 0.2.0
       ipaddr.js: 1.9.1
+
+  proxy-compare@3.0.1: {}
 
   qs@6.15.3:
     dependencies:
