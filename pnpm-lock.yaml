@@ -303,6 +303,9 @@ importers:
       '@zag-js/core':
         specifier: ^1.43.0
         version: 1.43.0
+      '@zag-js/presence':
+        specifier: ^1.43.0
+        version: 1.43.0
       '@zag-js/react':
         specifier: ^1.43.0
         version: 1.43.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
@@ -1526,6 +1529,9 @@ packages:
 
   '@zag-js/dom-query@1.43.0':
     resolution: {integrity: sha512-yQDR00jJj0tgrRH43QJx7NtQH+EBxQtEdFKMzG7c88xL1ZRtqXYpqNNSmCuGj5RTsEceQjEhAxeTJikUYp9M0g==}
+
+  '@zag-js/presence@1.43.0':
+    resolution: {integrity: sha512-pfNmHIsIJvTSLOxrLy6Of3jZvBhhL7NikxmcPk9vdVt5d0NELs158YzcohQpmd1Ci8RcQTEGcTh6J5R2tyjUNg==}
 
   '@zag-js/react@1.43.0':
     resolution: {integrity: sha512-UGgZcPZw69p5DUE0XiUBdPHK8m/JmsRD8RC/DRHMKyAlrYqKxzp7TKhheCeJ52ZwXMG/QryUA6TWEBOVuYG1Tg==}
@@ -4495,6 +4501,12 @@ snapshots:
 
   '@zag-js/dom-query@1.43.0':
     dependencies:
+      '@zag-js/types': 1.43.0
+
+  '@zag-js/presence@1.43.0':
+    dependencies:
+      '@zag-js/core': 1.43.0
+      '@zag-js/dom-query': 1.43.0
       '@zag-js/types': 1.43.0
 
   '@zag-js/react@1.43.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)':
