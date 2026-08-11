@@ -1,6 +1,7 @@
 import { definePreset } from '@pandacss/dev'
 import { keyframes } from './keyframes'
 import recipes from './recipes'
+import slotRecipes from './slot-recipes'
 import tokens from './tokens'
 
 const preset = definePreset({
@@ -16,6 +17,9 @@ const preset = definePreset({
 			keyframes,
 			recipes: {
 				button: recipes.buttonRecipe
+			},
+			slotRecipes: {
+				tooltip: slotRecipes.tooltipSlotRecipe
 			},
 			tokens: {
 				easings: tokens.easings
