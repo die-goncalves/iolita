@@ -9,6 +9,7 @@ export default defineConfig({
 			headless: true,
 			provider: playwright({}),
 			instances: [{ browser: 'chromium' }]
-		}
+		},
+		setupFiles: ['./src/vitest.setup.ts']
 	}
 })
