@@ -22,7 +22,8 @@ const preset = definePreset({
 				tooltip: slotRecipes.tooltipSlotRecipe
 			},
 			tokens: {
-				easings: tokens.easings
+				easings: tokens.easings,
+				zIndex: tokens.zIndices
 			}
 		}
 	}
