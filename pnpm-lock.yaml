@@ -313,6 +313,9 @@ importers:
       '@zag-js/core':
         specifier: ^1.43.0
         version: 1.43.0
+      '@zag-js/popover':
+        specifier: ^1.43.0
+        version: 1.43.0
       '@zag-js/presence':
         specifier: ^1.43.0
         version: 1.43.0
