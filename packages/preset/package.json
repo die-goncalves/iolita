@@ -11,7 +11,7 @@
 	"license": "MIT",
 	"type": "module",
 	"dependencies": {
-		"@zag-js/popover": "^1.43.0",
-		"@zag-js/tooltip": "^1.43.0"
+		"@zag-js/popover": "^1.43.1",
+		"@zag-js/tooltip": "^1.43.1"
 	}
 }
