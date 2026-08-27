@@ -11,8 +11,8 @@ import { usePopoverContext } from './use-popover-context'
 const { Overview, SharedContent } = composeStories(stories)
 
 describe('popover', () => {
-	afterEach(() => {
-		cleanup()
+	afterEach(async () => {
+		await cleanup()
 		vi.useRealTimers()
 		vi.restoreAllMocks()
 	})
