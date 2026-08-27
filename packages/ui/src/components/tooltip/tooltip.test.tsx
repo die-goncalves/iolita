@@ -1,6 +1,6 @@
 import { composeStories } from '@storybook/react-vite'
 import { createRef } from 'react'
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { userEvent } from 'vitest/browser'
 import { cleanup, render, renderHook } from 'vitest-browser-react'
 import { Tooltip } from '.'
@@ -10,8 +10,12 @@ import { useTooltip } from './use-tooltip'
 const { Overview, SharedContent, RootProvider } = composeStories(stories)
 
 describe('tooltip', () => {
-	afterEach(() => {
-		cleanup()
+	beforeEach(async () => {
+		await userEvent.unhover(document.body)
+	})
+
+	afterEach(async () => {
+		await cleanup()
 		vi.useRealTimers()
 		vi.restoreAllMocks()
 	})
@@ -91,30 +95,25 @@ describe('tooltip', () => {
 
 			const trigger = screen.getByScopeAndPart('tooltip', 'trigger')
 
-			await user.unhover(trigger)
-			await vi.waitFor(() => {
-				expect(screen.getByScopeAndPart('tooltip', 'content')).not.toBeVisible()
-			})
+			await expect
+				.element(screen.getByScopeAndPart('tooltip', 'content'))
+				.not.toBeVisible()
 
 			await user.hover(trigger)
-			await vi.waitFor(() => {
-				expect(spy).toHaveBeenCalledWith(
-					expect.objectContaining({ open: true })
-				)
-			})
-			await vi.waitFor(() => {
-				expect(screen.getByScopeAndPart('tooltip', 'content')).toBeVisible()
-			})
+
+			expect(spy).toHaveBeenCalledWith(expect.objectContaining({ open: true }))
+
+			await expect
+				.element(screen.getByScopeAndPart('tooltip', 'content'))
+				.toBeVisible()
 
 			await user.unhover(trigger)
-			await vi.waitFor(() => {
-				expect(spy).toHaveBeenCalledWith(
-					expect.objectContaining({ open: false })
-				)
-			})
-			await vi.waitFor(() => {
-				expect(screen.getByScopeAndPart('tooltip', 'content')).not.toBeVisible()
-			})
+
+			expect(spy).toHaveBeenCalledWith(expect.objectContaining({ open: false }))
+
+			await expect
+				.element(screen.getByScopeAndPart('tooltip', 'content'))
+				.not.toBeVisible()
 		})
 	})
 
