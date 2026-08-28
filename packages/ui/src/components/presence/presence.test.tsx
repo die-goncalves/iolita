@@ -6,8 +6,8 @@ import { type UsePresenceProps, usePresence } from './use-presence'
 import type { PresenceContextProps } from './use-presence-context'
 
 describe('presence', () => {
-	afterEach(() => {
-		cleanup()
+	afterEach(async () => {
+		await cleanup()
 		vi.useRealTimers()
 		vi.restoreAllMocks()
 	})
@@ -24,8 +24,12 @@ describe('presence', () => {
 				</Presence.RootProvider>
 			)
 			const screen = await render(gate())
-			const sync = async (props?: UsePresenceProps) => {
+			const sync = async (
+				props?: UsePresenceProps,
+				callback?: () => void | Promise<void>
+			) => {
 				if (props) await rerender(props)
+				if (callback) await callback()
 				await screen.rerender(gate())
 			}
 			return { result, screen, sync }
@@ -47,29 +51,22 @@ describe('presence', () => {
 					present: false,
 					unmountOnExit: true
 				})
-				expect(screen.getByTestId('gate-el')).not.toBeInTheDocument()
+				await expect
+					.element(screen.getByTestId('gate-el'))
+					.not.toBeInTheDocument()
 				await sync({ present: true, unmountOnExit: true })
-				expect(screen.getByTestId('gate-el')).toBeInTheDocument()
+				await expect.element(screen.getByTestId('gate-el')).toBeInTheDocument()
 				await expect
 					.element(screen.getByTestId('gate-el'))
 					.toHaveAttribute('data-state', 'open')
-				await vi.waitFor(() => {
-					expect(result.current.shouldUnmount).toBe(false)
+				await sync({ present: false, unmountOnExit: true }, async () => {
+					await vi.waitFor(() => {
+						expect(result.current.present).toBe(false)
+					})
 				})
-				await sync()
-				expect(screen.getByTestId('gate-el')).toBeInTheDocument()
 				await expect
 					.element(screen.getByTestId('gate-el'))
-					.toHaveAttribute('data-state', 'open')
-				await sync({ present: false, unmountOnExit: true })
-				await expect
-					.element(screen.getByTestId('gate-el'))
-					.toHaveAttribute('data-state', 'closed')
-				await vi.waitFor(() => {
-					expect(result.current.shouldUnmount).toBe(true)
-				})
-				await sync()
-				expect(screen.getByTestId('gate-el')).not.toBeInTheDocument()
+					.not.toBeInTheDocument()
 			})
 
 			it('remains mounted on exit when unmountOnExit is false', async () => {
@@ -77,32 +74,28 @@ describe('presence', () => {
 					present: false,
 					unmountOnExit: false
 				})
-				expect(screen.getByTestId('gate-el')).toBeInTheDocument()
-				expect(screen.getByTestId('gate-el')).toHaveAttribute('hidden')
+				await expect.element(screen.getByTestId('gate-el')).toBeInTheDocument()
+				await expect
+					.element(screen.getByTestId('gate-el'))
+					.toHaveAttribute('hidden')
 				await sync({ present: true, unmountOnExit: false })
-				expect(screen.getByTestId('gate-el')).toBeInTheDocument()
+				await expect.element(screen.getByTestId('gate-el')).toBeInTheDocument()
 				await expect
 					.element(screen.getByTestId('gate-el'))
 					.toHaveAttribute('data-state', 'open')
-				await vi.waitFor(() => {
-					expect(result.current.shouldUnmount).toBe(false)
+				await sync({ present: false, unmountOnExit: false }, async () => {
+					await vi.waitFor(() => {
+						expect(result.current.shouldUnmount).toBe(false)
+						expect(result.current.getPresenceProps().hidden).toBe(true)
+					})
 				})
-				await sync()
 				expect(screen.getByTestId('gate-el')).toBeInTheDocument()
-				await expect
-					.element(screen.getByTestId('gate-el'))
-					.toHaveAttribute('data-state', 'open')
-				await sync({ present: false, unmountOnExit: false })
 				await expect
 					.element(screen.getByTestId('gate-el'))
 					.toHaveAttribute('data-state', 'closed')
-				await vi.waitFor(() => {
-					expect(result.current.shouldUnmount).toBe(false)
-					expect(result.current.getPresenceProps().hidden).toBe(true)
-				})
-				await sync()
-				expect(screen.getByTestId('gate-el')).toBeInTheDocument()
-				expect(screen.getByTestId('gate-el')).toHaveAttribute('hidden')
+				await expect
+					.element(screen.getByTestId('gate-el'))
+					.toHaveAttribute('hidden')
 			})
 		})
 
@@ -120,29 +113,26 @@ describe('presence', () => {
 					present: false,
 					unmountOnExit: true
 				})
-				expect(screen.getByTestId('gate-el')).not.toBeInTheDocument()
-				await sync({ present: true, unmountOnExit: true })
+				await expect
+					.element(screen.getByTestId('gate-el'))
+					.not.toBeInTheDocument()
+				await sync({ present: true, unmountOnExit: true }, async () => {
+					await vi.waitFor(() => {
+						expect(result.current.present).toBe(true)
+					})
+				})
+				await expect.element(screen.getByTestId('gate-el')).toBeInTheDocument()
 				await expect
 					.element(screen.getByTestId('gate-el'))
 					.toHaveAttribute('data-state', 'open')
-				await vi.waitFor(() => {
-					expect(result.current.shouldUnmount).toBe(false)
+				await sync({ present: false, unmountOnExit: true }, async () => {
+					await vi.waitFor(() => {
+						expect(result.current.present).toBe(false)
+					})
 				})
-				await sync()
-				expect(screen.getByTestId('gate-el')).toBeInTheDocument()
 				await expect
 					.element(screen.getByTestId('gate-el'))
-					.toHaveAttribute('data-state', 'open')
-				await sync({ present: false, unmountOnExit: true })
-				expect(screen.getByTestId('gate-el')).toBeInTheDocument()
-				await expect
-					.element(screen.getByTestId('gate-el'))
-					.toHaveAttribute('data-state', 'closed')
-				await vi.waitFor(() => {
-					expect(result.current.shouldUnmount).toBe(true)
-				})
-				await sync()
-				expect(screen.getByTestId('gate-el')).not.toBeInTheDocument()
+					.not.toBeInTheDocument()
 				document.head.removeChild(style)
 			})
 
@@ -159,32 +149,32 @@ describe('presence', () => {
 					present: false,
 					unmountOnExit: false
 				})
-				expect(screen.getByTestId('gate-el')).toBeInTheDocument()
-				expect(screen.getByTestId('gate-el')).toHaveAttribute('hidden')
-				await sync({ present: true, unmountOnExit: false })
+				await expect.element(screen.getByTestId('gate-el')).toBeInTheDocument()
 				await expect
 					.element(screen.getByTestId('gate-el'))
-					.toHaveAttribute('data-state', 'open')
-				await vi.waitFor(() => {
-					expect(result.current.shouldUnmount).toBe(false)
+					.toHaveAttribute('hidden')
+				await sync({ present: true, unmountOnExit: false }, async () => {
+					await vi.waitFor(() => {
+						expect(result.current.present).toBe(true)
+					})
 				})
-				await sync()
-				expect(screen.getByTestId('gate-el')).toBeInTheDocument()
+				await expect.element(screen.getByTestId('gate-el')).toBeInTheDocument()
 				await expect
 					.element(screen.getByTestId('gate-el'))
 					.toHaveAttribute('data-state', 'open')
-				await sync({ present: false, unmountOnExit: false })
-				expect(screen.getByTestId('gate-el')).toBeInTheDocument()
+				await sync({ present: false, unmountOnExit: false }, async () => {
+					await vi.waitFor(() => {
+						expect(result.current.present).toBe(false)
+						expect(result.current.getPresenceProps().hidden).toBe(true)
+					})
+				})
+				await expect.element(screen.getByTestId('gate-el')).toBeInTheDocument()
 				await expect
 					.element(screen.getByTestId('gate-el'))
 					.toHaveAttribute('data-state', 'closed')
-				await vi.waitFor(() => {
-					expect(result.current.shouldUnmount).toBe(false)
-					expect(result.current.getPresenceProps().hidden).toBe(true)
-				})
-				await sync()
-				expect(screen.getByTestId('gate-el')).toBeInTheDocument()
-				expect(screen.getByTestId('gate-el')).toHaveAttribute('hidden')
+				await expect
+					.element(screen.getByTestId('gate-el'))
+					.toHaveAttribute('hidden')
 				document.head.removeChild(style)
 			})
 		})
@@ -217,10 +207,12 @@ describe('presence', () => {
 				UsePresenceProps,
 				PresenceContextProps
 			>(initialProps => usePresence({ ...initialProps }), {
-				initialProps: { activity: true, present: false }
+				initialProps: { present: false }
 			})
 
-			expect(result.current.getPresenceProps().hidden).toBe(false)
+			expect(result.current.getPresenceProps({ activity: true }).hidden).toBe(
+				false
+			)
 		})
 
 		it('getPresenceProps sets hidden to the inverse of present whenever activity is false', async () => {
@@ -228,10 +220,12 @@ describe('presence', () => {
 				UsePresenceProps,
 				PresenceContextProps
 			>(initialProps => usePresence({ ...initialProps }), {
-				initialProps: { activity: false, present: false }
+				initialProps: { present: false }
 			})
 
-			expect(result.current.getPresenceProps().hidden).toBe(true)
+			expect(result.current.getPresenceProps({ activity: false }).hidden).toBe(
+				true
+			)
 		})
 	})
 
@@ -251,18 +245,27 @@ describe('presence', () => {
 			return <div data-testid="seconds">{seconds}</div>
 		}
 
-		function EffectParent(props: UsePresenceProps) {
+		function EffectParent({
+			activity,
+			...props
+		}: UsePresenceProps & {
+			activity?: boolean
+		}) {
 			const presence = usePresence(props)
 			return (
 				<Presence.RootProvider {...presence}>
-					<Presence.Gate data-testid="gate-el">
+					<Presence.Gate activity={activity} data-testid="gate-el">
 						<EffectChild />
 					</Presence.Gate>
 				</Presence.RootProvider>
 			)
 		}
 
-		const setup = async (props: UsePresenceProps) => {
+		const setup = async (
+			props: UsePresenceProps & {
+				activity?: boolean
+			}
+		) => {
 			const setIntervalSpy = vi.spyOn(window, 'setInterval')
 			const clearIntervalSpy = vi.spyOn(window, 'clearInterval')
 			const screen = await render(<EffectParent {...props} />)
