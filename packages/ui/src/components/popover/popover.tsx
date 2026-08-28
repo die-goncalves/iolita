@@ -3,7 +3,6 @@ import {
 	type PopoverVariantProps,
 	popover
 } from '@iolita/styled-system/recipes'
-import * as slot from '@radix-ui/react-slot'
 import type * as zPopover from '@zag-js/popover'
 import { mergeProps, type PropTypes } from '@zag-js/react'
 import {
@@ -11,6 +10,7 @@ import {
 	forwardRef,
 	type ReactNode
 } from 'react'
+import { Slot } from '../../utils/slot'
 import { type PopoverUserProps, usePopover } from './use-popover'
 import { PopoverProvider, usePopoverContext } from './use-popover-context'
 
@@ -44,7 +44,7 @@ export const Trigger = forwardRef<HTMLButtonElement, TriggerProps>(
 		const { trigger } = popover()
 		const mergedClassName = cx(trigger, className)
 
-		const Component = asChild ? slot.Slot : 'button'
+		const Component = asChild ? Slot : 'button'
 
 		return (
 			<Component
@@ -137,7 +137,7 @@ export const CloseTrigger = forwardRef<HTMLButtonElement, CloseTriggerProps>(
 		const { closeTrigger } = popover()
 		const mergedClassName = cx(closeTrigger, className)
 
-		const Component = asChild ? slot.Slot : 'button'
+		const Component = asChild ? Slot : 'button'
 
 		return (
 			<Component
