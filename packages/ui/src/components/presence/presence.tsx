@@ -4,7 +4,8 @@ import {
 	forwardRef,
 	type ReactNode
 } from 'react'
-import { mergeRefs } from '../../utils/merge-refs'
+import { useComposedRefs } from '../../utils/compose-refs'
+import { Slot } from '../../utils/slot'
 import { type UsePresenceProps, usePresence } from './use-presence'
 import {
 	PresenceProvider,
@@ -26,22 +27,30 @@ export const Root = ({ children, ...props }: RootProps) => {
 }
 Root.displayName = 'Presence.Root'
 
-type GateProps = ComponentPropsWithoutRef<'div'>
+type GateProps = ComponentPropsWithoutRef<'div'> & {
+	asChild?: boolean | undefined
+	activity?: boolean | undefined
+}
 export const Gate = forwardRef<HTMLDivElement, GateProps>(
-	(props, forwardedRef) => {
-		const { getPresenceProps, setNode, shouldUnmount, present, activity } =
+	({ asChild = false, activity = false, ...props }, forwardedRef) => {
+		const { getPresenceProps, setNode, shouldUnmount, present } =
 			usePresenceContext()
-		const mergedRefs = mergeRefs(setNode, forwardedRef)
+		const composedRefs = useComposedRefs(setNode, forwardedRef)
 
 		if (shouldUnmount) return null
 
+		const Component = asChild ? Slot : 'div'
+
+		const dataAttr = asChild
+			? {}
+			: { 'data-scope': 'presence', 'data-part': 'root' }
+
 		const content = (
-			<div
+			<Component
 				{...props}
-				{...getPresenceProps()}
-				data-scope="presence"
-				data-part="root"
-				ref={mergedRefs}
+				{...getPresenceProps({ activity })}
+				{...dataAttr}
+				ref={composedRefs}
 			/>
 		)
 
@@ -55,3 +64,12 @@ export const Gate = forwardRef<HTMLDivElement, GateProps>(
 	}
 )
 Gate.displayName = 'Presence.Gate'
+
+export const Show = ({ children }: { children: ReactNode }) => {
+	const { shouldUnmount } = usePresenceContext()
+
+	if (shouldUnmount) return null
+
+	return children
+}
+Show.displayName = 'Presence.Show'

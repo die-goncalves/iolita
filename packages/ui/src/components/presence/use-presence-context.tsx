@@ -1,13 +1,14 @@
 import type { Api } from '@zag-js/presence'
 import { createContext, type ReactNode, useContext } from 'react'
 
+export type PresenceProps = { activity?: boolean | undefined }
+
 export type PresenceContextProps = Api & {
 	unmountOnExit?: boolean | undefined
-	getPresenceProps: () => {
+	getPresenceProps: (props?: PresenceProps) => {
 		'data-state': string | undefined
 		hidden?: boolean | undefined
 	}
-	activity?: boolean | undefined
 	shouldUnmount: boolean
 }
 export const PresenceContext = createContext({} as PresenceContextProps)
