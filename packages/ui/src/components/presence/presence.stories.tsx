@@ -1,18 +1,21 @@
 import { css } from '@iolita/styled-system/css'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Portal } from '@zag-js/react'
-import { type RefObject, useRef, useState } from 'react'
+import { type ComponentProps, type RefObject, useRef, useState } from 'react'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { Button } from '../button'
 import { Presence } from '.'
 
+type StoryProps = ComponentProps<typeof Presence.Root> & {
+	activity?: boolean
+}
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 /**
  * Controls the enter/exit lifecycle of animated elements — keeping them
  * mounted long enough to finish exit animations, then hiding or
  * unmounting them based on `unmountOnExit` and `activity`.
  */
-const meta = {
+const meta: Meta<StoryProps> = {
 	title: 'Components/Presence',
 	component: Presence.Root,
 	parameters: {
@@ -49,7 +52,7 @@ const meta = {
 	}
 	// Use `fn` to spy on the onClick arg, which will appear in the actions panel once invoked: https://storybook.js.org/docs/essentials/actions#story-args
 	// args: { onClick: fn() }
-} satisfies Meta<typeof Presence.Root>
+} satisfies Meta<StoryProps>
 
 export default meta
 type Story = StoryObj<typeof meta>
@@ -92,12 +95,9 @@ export const Overview: Story = {
 						borderColor: 'violet.800'
 					})}
 				>
-					<Presence.Root
-						present={open}
-						unmountOnExit={args.unmountOnExit}
-						activity={args.activity}
-					>
+					<Presence.Root present={open} unmountOnExit={args.unmountOnExit}>
 						<Presence.Gate
+							activity={args.activity}
 							className={css({
 								_open: {
 									animationName: 'fade-in',
@@ -219,13 +219,10 @@ export const WithPortal: Story = {
 						borderColor: 'violet.800'
 					})}
 				></div>
-				<Presence.Root
-					present={open}
-					unmountOnExit={args.unmountOnExit}
-					activity={args.activity}
-				>
+				<Presence.Root present={open} unmountOnExit={args.unmountOnExit}>
 					<Portal container={containerRef as RefObject<HTMLElement>}>
 						<Presence.Gate
+							activity={args.activity}
 							className={css({
 								_open: {
 									animationName: 'fade-in',
@@ -507,13 +504,10 @@ function StatePreservedWithActivity() {
 						borderColor: 'violet.800'
 					})}
 				></div>
-				<Presence.Root
-					present={open}
-					unmountOnExit={args.unmountOnExit}
-					activity={args.activity}
-				>
+				<Presence.Root present={open} unmountOnExit={args.unmountOnExit}>
 					<Portal container={containerRef as RefObject<HTMLElement>}>
 						<Presence.Gate
+							activity={args.activity}
 							className={css({
 								_open: {
 									animationName: 'fade-in',
