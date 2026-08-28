@@ -3,7 +3,6 @@ import {
 	type TooltipVariantProps,
 	tooltip
 } from '@iolita/styled-system/recipes'
-import * as slot from '@radix-ui/react-slot'
 import { mergeProps, type PropTypes } from '@zag-js/react'
 import type * as zTooltip from '@zag-js/tooltip'
 import {
@@ -11,6 +10,7 @@ import {
 	forwardRef,
 	type ReactNode
 } from 'react'
+import { Slot } from '../../utils/slot'
 import { type TooltipUserProps, useTooltip } from './use-tooltip'
 import { TooltipProvider, useTooltipContext } from './use-tooltip-context'
 
@@ -44,7 +44,7 @@ export const Trigger = forwardRef<HTMLButtonElement, TriggerProps>(
 		const { trigger } = tooltip()
 		const mergedClassName = cx(trigger, className)
 
-		const Component = asChild ? slot.Slot : 'button'
+		const Component = asChild ? Slot : 'button'
 
 		return (
 			<Component
