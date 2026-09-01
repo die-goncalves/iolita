@@ -1,9 +1,13 @@
 export const keyframes = {
+	'fade-in': { from: { opacity: 0 }, to: { opacity: 1 } },
+	'fade-out': { from: { opacity: 1 }, to: { opacity: 0 } },
+	'scale-in': { from: { scale: 0.95 }, to: { scale: 1 } },
+	'scale-out': { from: { scale: 1 }, to: { scale: 0.95 } },
 	'slide-from-top': {
 		from: { translate: '0 calc(var(--slide-offset, token(spacing.2)) * -1)' },
 		to: { translate: '0' }
-  },
-  'slide-from-right': {
+	},
+	'slide-from-right': {
 		from: { translate: 'var(--slide-offset, token(spacing.2)) 0' },
 		to: { translate: '0' }
 	},
@@ -18,8 +22,8 @@ export const keyframes = {
 	'slide-to-top': {
 		from: { translate: '0' },
 		to: { translate: '0 calc(var(--slide-offset, token(spacing.2)) * -1)' }
-  },
-  'slide-to-right': {
+	},
+	'slide-to-right': {
 		from: { translate: '0' },
 		to: { translate: 'var(--slide-offset, token(spacing.2)) 0' }
 	},
@@ -30,7 +34,5 @@ export const keyframes = {
 	'slide-to-left': {
 		from: { translate: '0' },
 		to: { translate: 'calc(var(--slide-offset, token(spacing.2)) * -1) 0' }
-	},
-	'fade-in': { from: { opacity: 0 }, to: { opacity: 1 } },
-	'fade-out': { from: { opacity: 1 }, to: { opacity: 0 } }
+	}
 }
