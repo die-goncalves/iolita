@@ -15,6 +15,7 @@
 	"dependencies": {
 		"@iolita/styled-system": "workspace:*",
 		"@zag-js/core": "^1.43.1",
+		"@zag-js/dialog": "^1.43.1",
 		"@zag-js/popover": "^1.43.1",
 		"@zag-js/presence": "^1.43.1",
 		"@zag-js/react": "^1.43.1",
