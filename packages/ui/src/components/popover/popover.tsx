@@ -93,12 +93,8 @@ Content.displayName = 'Popover.Content'
 type ArrowProps = ComponentPropsWithoutRef<'div'>
 export const Arrow = forwardRef<HTMLDivElement, ArrowProps>(
 	(props, forwardedRef) => {
-		const { getArrowProps, getContentProps } = usePopoverContext()
-		const { className, ...mergedProps } = mergeProps(
-			getArrowProps(),
-			{ hidden: getContentProps().hidden },
-			props
-		)
+		const { getArrowProps } = usePopoverContext()
+		const { className, ...mergedProps } = mergeProps(getArrowProps(), props)
 		const { arrow } = popover()
 		const mergedClassName = cx(arrow, className)
 

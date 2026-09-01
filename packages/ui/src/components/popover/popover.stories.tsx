@@ -6,7 +6,6 @@ import { type ComponentProps, useRef, useState } from 'react'
 import { expect, fn, userEvent, waitFor, within } from 'storybook/test'
 import { Button } from '../button'
 import { Presence } from '../presence'
-import { usePresence } from '../presence/use-presence'
 import { Popover } from '.'
 import { usePopover } from './use-popover'
 
@@ -1256,10 +1255,6 @@ export const WithAnimation: Story = {
 	render: args => {
 		const [open, setOpen] = useState(false)
 		const [container, setContainer] = useState<HTMLDivElement | null>(null)
-		const api = usePresence({
-			present: open,
-			activity: true
-		})
 
 		return (
 			<div
@@ -1291,12 +1286,13 @@ export const WithAnimation: Story = {
 					</Popover.Trigger>
 
 					{container && (
-						<Presence.RootProvider {...api}>
+						<Presence.Root present={open}>
 							<Portal container={{ current: container }}>
 								<Popover.Positioner>
 									<Presence.Gate
 										className={css({
 											_open: {
+												willChange: 'translate, opacity',
 												animationDuration: '500ms, 200ms',
 												animationTimingFunction:
 													'var(--easings-m3-exp-spatial), var(--easings-m3-exp-effects)',
@@ -1332,68 +1328,70 @@ export const WithAnimation: Story = {
 											}
 										})}
 									>
-										<Popover.Content {...api.getPresenceProps()}>
-											<Popover.Arrow {...api.getPresenceProps()}>
-												<Popover.ArrowTip />
-											</Popover.Arrow>
-											<div
-												className={css({
-													display: 'flex',
-													alignItems: 'start',
-													justifyContent: 'space-between'
-												})}
-											>
-												<Popover.Title
+										{props => (
+											<Popover.Content {...props}>
+												<Popover.Arrow>
+													<Popover.ArrowTip />
+												</Popover.Arrow>
+												<div
 													className={css({
-														minHeight: '10',
-														justifySelf: 'center',
-														textStyle: 'xl',
-														paddingBlockStart:
-															'calc((var(--sizes-10) - 1lh) / 2)'
+														display: 'flex',
+														alignItems: 'start',
+														justifyContent: 'space-between'
 													})}
 												>
-													Esse iure
-												</Popover.Title>
-												<Popover.CloseTrigger asChild>
-													<Button
-														variant="ghost"
-														className={css({ padding: 0 })}
-														icon={
-															<svg
-																xmlns="http://www.w3.org/2000/svg"
-																viewBox="0 -960 960 960"
-																preserveAspectRatio="xMidYMid meet"
-																aria-hidden="true"
-																fill="currentColor"
-															>
-																<path d="m249-207-42-42 231-231-231-231 42-42 231 231 231-231 42 42-231 231 231 231-42 42-231-231-231 231Z" />
-															</svg>
-														}
-													/>
-												</Popover.CloseTrigger>
-											</div>
-											<div>
-												<Popover.Description>
-													<p>
-														Agnitio ultio censura cibus unus vos caterva
-														ventito. Custodia demitto delicate textus cotidie
-														cultellus utique.
-													</p>
-												</Popover.Description>
-											</div>
-											<div
-												className={css({
-													display: 'flex',
-													justifyContent: 'flex-end'
-												})}
-											>
-												<Button variant="ghost">Action</Button>
-											</div>
-										</Popover.Content>
+													<Popover.Title
+														className={css({
+															minHeight: '10',
+															justifySelf: 'center',
+															textStyle: 'xl',
+															paddingBlockStart:
+																'calc((var(--sizes-10) - 1lh) / 2)'
+														})}
+													>
+														Esse iure
+													</Popover.Title>
+													<Popover.CloseTrigger asChild>
+														<Button
+															variant="ghost"
+															className={css({ padding: 0 })}
+															icon={
+																<svg
+																	xmlns="http://www.w3.org/2000/svg"
+																	viewBox="0 -960 960 960"
+																	preserveAspectRatio="xMidYMid meet"
+																	aria-hidden="true"
+																	fill="currentColor"
+																>
+																	<path d="m249-207-42-42 231-231-231-231 42-42 231 231 231-231 42 42-231 231 231 231-42 42-231-231-231 231Z" />
+																</svg>
+															}
+														/>
+													</Popover.CloseTrigger>
+												</div>
+												<div>
+													<Popover.Description>
+														<p>
+															Agnitio ultio censura cibus unus vos caterva
+															ventito. Custodia demitto delicate textus cotidie
+															cultellus utique.
+														</p>
+													</Popover.Description>
+												</div>
+												<div
+													className={css({
+														display: 'flex',
+														justifyContent: 'flex-end'
+													})}
+												>
+													<Button variant="ghost">Action</Button>
+												</div>
+											</Popover.Content>
+										)}
 									</Presence.Gate>
 								</Popover.Positioner>
 							</Portal>
-						</Presence.RootProvider>
+						</Presence.Root>
 					)}
 				</Popover.Root>
 			</div>

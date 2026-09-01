@@ -6,7 +6,6 @@ import { type ComponentProps, type ReactNode, useState } from 'react'
 import { expect, fn, userEvent, waitFor, within } from 'storybook/test'
 import { Button } from '../button'
 import { Presence } from '../presence'
-import { usePresence } from '../presence/use-presence'
 import { Tooltip } from '.'
 import { useTooltip } from './use-tooltip'
 
@@ -944,10 +943,6 @@ export const WithAnimation: Story = {
 	render: args => {
 		const [open, setOpen] = useState(false)
 		const [container, setContainer] = useState<HTMLDivElement | null>(null)
-		const api = usePresence({
-			present: open,
-			activity: true
-		})
 
 		return (
 			<div
@@ -980,12 +975,13 @@ export const WithAnimation: Story = {
 					</Tooltip.Trigger>
 
 					{container && (
-						<Presence.RootProvider {...api}>
+						<Presence.Root present={open}>
 							<Portal container={{ current: container }}>
 								<Tooltip.Positioner>
 									<Presence.Gate
 										className={css({
 											_open: {
+												willChange: 'translate, opacity',
 												animationDuration: '500ms, 200ms',
 												animationTimingFunction:
 													'var(--easings-m3-exp-spatial), var(--easings-m3-exp-effects)',
@@ -1021,16 +1017,20 @@ export const WithAnimation: Story = {
 											}
 										})}
 									>
-										<Tooltip.Arrow {...api.getPresenceProps()}>
-											<Tooltip.ArrowTip />
-										</Tooltip.Arrow>
-										<Tooltip.Content {...api.getPresenceProps()}>
-											{args.tooltipText}
-										</Tooltip.Content>
+										{props => (
+											<>
+												<Tooltip.Arrow {...props}>
+													<Tooltip.ArrowTip />
+												</Tooltip.Arrow>
+												<Tooltip.Content {...props}>
+													{args.tooltipText}
+												</Tooltip.Content>
+											</>
+										)}
 									</Presence.Gate>
 								</Tooltip.Positioner>
 							</Portal>
-						</Presence.RootProvider>
+						</Presence.Root>
 					)}
 				</Tooltip.Root>
 			</div>

@@ -118,7 +118,9 @@ export const Overview: Story = {
 									color: 'white'
 								})}
 							>
-								<p>{args.children}</p>
+								<p>
+									{typeof args.children === 'function' ? null : args.children}
+								</p>
 							</div>
 						</Presence.Gate>
 					</Presence.Root>
@@ -243,7 +245,9 @@ export const WithPortal: Story = {
 									color: 'white'
 								})}
 							>
-								<p>{args.children}</p>
+								<p>
+									{typeof args.children === 'function' ? null : args.children}
+								</p>
 							</div>
 						</Presence.Gate>
 					</Portal>
@@ -521,7 +525,7 @@ function StatePreservedWithActivity() {
 								}
 							})}
 						>
-							{args.children}
+							{typeof args.children === 'function' ? null : args.children}
 						</Presence.Gate>
 					</Portal>
 				</Presence.Root>

@@ -93,12 +93,8 @@ Content.displayName = 'Tooltip.Content'
 type ArrowProps = ComponentPropsWithoutRef<'div'>
 export const Arrow = forwardRef<HTMLDivElement, ArrowProps>(
 	(props, forwardedRef) => {
-		const { getArrowProps, getContentProps } = useTooltipContext()
-		const { className, ...mergedProps } = mergeProps(
-			getArrowProps(),
-			{ hidden: getContentProps().hidden },
-			props
-		)
+		const { getArrowProps } = useTooltipContext()
+		const { className, ...mergedProps } = mergeProps(getArrowProps(), props)
 		const { arrow } = tooltip()
 		const mergedClassName = cx(arrow, className)
 
