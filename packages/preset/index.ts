@@ -19,6 +19,7 @@ const preset = definePreset({
 				button: recipes.buttonRecipe
 			},
 			slotRecipes: {
+				dialog: slotRecipes.dialogSlotRecipe,
 				popover: slotRecipes.popoverSlotRecipe,
 				tooltip: slotRecipes.tooltipSlotRecipe
 			},
