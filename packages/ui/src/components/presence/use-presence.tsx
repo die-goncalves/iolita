@@ -21,7 +21,12 @@ export const usePresence = ({
 
 	const api = connect(service, normalizeProps)
 
-	const getPresenceProps = (props: PresenceProps = {}) => ({
+	const getPresenceProps = (
+		props: PresenceProps = {}
+	): {
+		'data-state'?: 'open' | 'closed' | undefined
+		hidden?: boolean | undefined
+	} => ({
 		'data-state': api.skip ? undefined : userProps.present ? 'open' : 'closed',
 		hidden: props.activity ? false : !api.present
 	})

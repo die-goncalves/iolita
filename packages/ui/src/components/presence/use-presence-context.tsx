@@ -6,7 +6,7 @@ export type PresenceProps = { activity?: boolean | undefined }
 export type PresenceContextProps = Api & {
 	unmountOnExit?: boolean | undefined
 	getPresenceProps: (props?: PresenceProps) => {
-		'data-state': string | undefined
+		'data-state'?: 'open' | 'closed' | undefined
 		hidden?: boolean | undefined
 	}
 	shouldUnmount: boolean

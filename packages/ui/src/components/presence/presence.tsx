@@ -19,39 +19,60 @@ export function RootProvider({ children, ...props }: RootProviderProps) {
 }
 RootProvider.displayName = 'Presence.RootProvider'
 
-type RootProps = UsePresenceProps & { children: ReactNode }
+type RootProps = UsePresenceProps & {
+	children?:
+		| ReactNode
+		| (({ shouldUnmount }: { shouldUnmount: boolean }) => ReactNode)
+}
 export const Root = ({ children, ...props }: RootProps) => {
 	const api = usePresence(props)
 
-	return <PresenceProvider {...api}>{children}</PresenceProvider>
+	return (
+		<PresenceProvider {...api}>
+			{typeof children === 'function'
+				? children({ shouldUnmount: api.shouldUnmount })
+				: children}
+		</PresenceProvider>
+	)
 }
 Root.displayName = 'Presence.Root'
 
-type GateProps = ComponentPropsWithoutRef<'div'> & {
+type GateProps = Omit<ComponentPropsWithoutRef<'div'>, 'children'> & {
 	asChild?: boolean | undefined
+	children?:
+		| ReactNode
+		| ((props: {
+				'data-state'?: 'open' | 'closed' | undefined
+				hidden?: boolean | undefined
+		  }) => ReactNode)
 	activity?: boolean | undefined
 }
 export const Gate = forwardRef<HTMLDivElement, GateProps>(
-	({ asChild = false, activity = false, ...props }, forwardedRef) => {
+	({ asChild, activity = false, children, ...props }, forwardedRef) => {
 		const { getPresenceProps, setNode, shouldUnmount, present } =
 			usePresenceContext()
 		const composedRefs = useComposedRefs(setNode, forwardedRef)
+		const presenceAttrs = getPresenceProps({ activity })
 
 		if (shouldUnmount) return null
 
 		const Component = asChild ? Slot : 'div'
 
-		const dataAttr = asChild
+		const dataAttrs = asChild
 			? {}
 			: { 'data-scope': 'presence', 'data-part': 'root' }
 
 		const content = (
 			<Component
 				{...props}
-				{...getPresenceProps({ activity })}
-				{...dataAttr}
+				{...presenceAttrs}
+				{...dataAttrs}
 				ref={composedRefs}
-			/>
+			>
+				{typeof children === 'function'
+					? children({ ...presenceAttrs })
+					: children}
+			</Component>
 		)
 
 		if (activity) {
@@ -64,12 +85,3 @@ export const Gate = forwardRef<HTMLDivElement, GateProps>(
 	}
 )
 Gate.displayName = 'Presence.Gate'
-
-export const Show = ({ children }: { children: ReactNode }) => {
-	const { shouldUnmount } = usePresenceContext()
-
-	if (shouldUnmount) return null
-
-	return children
-}
-Show.displayName = 'Presence.Show'
