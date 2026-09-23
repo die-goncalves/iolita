@@ -12,6 +12,7 @@
 	"type": "module",
 	"dependencies": {
 		"@zag-js/dialog": "^1.44.0",
+		"@zag-js/menu": "^1.44.0",
 		"@zag-js/popover": "^1.44.0",
 		"@zag-js/tooltip": "^1.44.0"
 	}

@@ -292,6 +292,9 @@ importers:
       '@zag-js/dialog':
         specifier: ^1.44.0
         version: 1.44.0
+      '@zag-js/menu':
+        specifier: ^1.44.0
+        version: 1.44.0
       '@zag-js/popover':
         specifier: ^1.44.0
         version: 1.44.0
@@ -1593,6 +1596,9 @@ packages:
   '@zag-js/interact-outside@1.44.0':
     resolution: {integrity: sha512-yFX3eHamp82kax65xIYLemXNH8kD9MvXm7lHttnwlp/XZoAgDTR2l+iLJYU6pLZsuSM9GsrnWQrfHaHWBhyNWw==}
 
+  '@zag-js/menu@1.44.0':
+    resolution: {integrity: sha512-Z1k6h8PRYtO7S8CeMupoODyuMWBK+eDBwS+r+A8gQOajWXxn7YGKha4/fxtUyyuW0e0U/b//JIM8qvwDPLoK3Q==}
+
   '@zag-js/popover@1.44.0':
     resolution: {integrity: sha512-TQ6EVjwxYgow3aHCVRIrAJqn9eM1ld/SoVg3Ftuztc0xIEXeKCh0B2q06mxB+J0CNnmDzfFngzmC7OoV6jKAnw==}
 
@@ -1607,6 +1613,9 @@ packages:
     peerDependencies:
       react: '>=18.0.0'
       react-dom: '>=18.0.0'
+
+  '@zag-js/rect-utils@1.44.0':
+    resolution: {integrity: sha512-OuxBWzwP0zKDundVBH/ZJerrNo+0yP2HyWWwcqV/PI78W3SflMn6BAzsfCOLVxRNq7XfewCPYmz2bZo5tgpjvw==}
 
   '@zag-js/remove-scroll@1.44.0':
     resolution: {integrity: sha512-Y7Oxp63eMOC3UpUj/Uk5d6mDTI//XrfBl780X40zf/FlwTu9Tjaw7T+Hq7kg0oDDXPnP65pb4MxG9UHhGfH7Gg==}
@@ -4637,6 +4646,18 @@ snapshots:
       '@zag-js/dom-query': 1.44.0
       '@zag-js/utils': 1.44.0
 
+  '@zag-js/menu@1.44.0':
+    dependencies:
+      '@zag-js/anatomy': 1.44.0
+      '@zag-js/core': 1.44.0
+      '@zag-js/dismissable': 1.44.0
+      '@zag-js/dom-query': 1.44.0
+      '@zag-js/focus-visible': 1.44.0
+      '@zag-js/popper': 1.44.0
+      '@zag-js/rect-utils': 1.44.0
+      '@zag-js/types': 1.44.0
+      '@zag-js/utils': 1.44.0
+
   '@zag-js/popover@1.44.0':
     dependencies:
       '@zag-js/anatomy': 1.44.0
@@ -4670,6 +4691,8 @@ snapshots:
       '@zag-js/utils': 1.44.0
       react: 19.2.7
       react-dom: 19.2.7(react@19.2.7)
+
+  '@zag-js/rect-utils@1.44.0': {}
 
   '@zag-js/remove-scroll@1.44.0':
     dependencies:
