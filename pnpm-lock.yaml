@@ -319,6 +319,15 @@ importers:
       '@zag-js/dialog':
         specifier: ^1.44.0
         version: 1.44.0
+      '@zag-js/dismissable':
+        specifier: ^1.44.0
+        version: 1.44.0
+      '@zag-js/dom-query':
+        specifier: ^1.44.0
+        version: 1.44.0
+      '@zag-js/menu':
+        specifier: ^1.44.0
+        version: 1.44.0
       '@zag-js/popover':
         specifier: ^1.44.0
         version: 1.44.0
@@ -329,6 +338,9 @@ importers:
         specifier: ^1.44.0
         version: 1.44.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@zag-js/tooltip':
+        specifier: ^1.44.0
+        version: 1.44.0
+      '@zag-js/utils':
         specifier: ^1.44.0
         version: 1.44.0
       react:
