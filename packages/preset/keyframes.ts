@@ -3,6 +3,20 @@ export const keyframes = {
 	'fade-out': { from: { opacity: 1 }, to: { opacity: 0 } },
 	'scale-in': { from: { scale: 0.95 }, to: { scale: 1 } },
 	'scale-out': { from: { scale: 1 }, to: { scale: 0.95 } },
+	'slide-in': {
+		from: {
+			insetBlockStart: 'var(--slide-offset-y, 0)',
+			insetInlineStart: 'var(--slide-offset-x, 0)'
+		},
+		to: { insetBlockStart: '0', insetInlineStart: '0' }
+	},
+	'slide-out': {
+		from: { insetBlockStart: '0', insetInlineStart: '0' },
+		to: {
+			insetBlockStart: 'var(--slide-offset-y, 0)',
+			insetInlineStart: 'var(--slide-offset-x, 0)'
+		}
+	},
 	'slide-from-top': {
 		from: { translate: '0 calc(var(--slide-offset, token(spacing.2)) * -1)' },
 		to: { translate: '0' }
