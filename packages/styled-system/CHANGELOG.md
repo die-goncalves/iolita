@@ -1,0 +1,8 @@
+# @iolita/styled-system
+
+## 0.0.1
+
+### Patch Changes
+
+- Updated dependencies [[`0fb9ec2`](https://github.com/die-goncalves/iolita/commit/0fb9ec2091c566e9425aee1f4b0ea5a7e037b6eb), [`cf84420`](https://github.com/die-goncalves/iolita/commit/cf84420bff2695c44f9e80cccb0161a50525645c), [`d1584ba`](https://github.com/die-goncalves/iolita/commit/d1584baa90605c5d09617dee2afef0f7113d03d9), [`59728c1`](https://github.com/die-goncalves/iolita/commit/59728c16e99ad887d6c860125983c80bb0be5f11), [`47bdd33`](https://github.com/die-goncalves/iolita/commit/47bdd33ac06dc0937f069500249df8002539abd1), [`8c54a52`](https://github.com/die-goncalves/iolita/commit/8c54a52127146587ba4a16571e4cf1fa3e3705e8), [`05fe2c5`](https://github.com/die-goncalves/iolita/commit/05fe2c509cb153bc79599a6e41ae20d1415bb8d3), [`4664354`](https://github.com/die-goncalves/iolita/commit/4664354b9cce2da260e2c37e6c8093e1e99ef0e5), [`532bcf2`](https://github.com/die-goncalves/iolita/commit/532bcf207467f48a23c2ef807416cf64a8c16091), [`67ee36a`](https://github.com/die-goncalves/iolita/commit/67ee36aabfa9598db36d7b8bbc25af89dd1aec7c), [`2c84002`](https://github.com/die-goncalves/iolita/commit/2c840026062577bf1ae26b00934b920699b88de5), [`6e088c9`](https://github.com/die-goncalves/iolita/commit/6e088c9a8ad398b2b70a31dedc102d5cad8f2c55), [`5e302c5`](https://github.com/die-goncalves/iolita/commit/5e302c52ab939efda78501a129aac351508abfb2), [`7e6eae1`](https://github.com/die-goncalves/iolita/commit/7e6eae13678e0c3f001795b93451ff886a0b71ad), [`1cec71e`](https://github.com/die-goncalves/iolita/commit/1cec71e0b2fa6159f15e4d1e3fd5e10cb14e689a)]:
+  - @iolita/preset@0.1.0
