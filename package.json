@@ -20,6 +20,7 @@
 	"devDependencies": {
 		"@biomejs/biome": "2.5.2",
 		"@changesets/cli": "^2.31.1",
+		"@changesets/types": "^7.0.0",
 		"@pandacss/dev": "^1.11.4"
 	}
 }
