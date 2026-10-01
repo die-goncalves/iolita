@@ -388,28 +388,28 @@ export const Overview: Story = {
 		const menu = await screen.findByRole('menu')
 		await expect(menu).toBeVisible()
 		await expect(trigger).toHaveAttribute('aria-expanded', 'true')
-
-		const items = within(menu).getAllByRole('menuitem')
-		await expect(items).toHaveLength(3)
-		await expect(
-			within(menu).getByRole('menuitem', { name: 'New file' })
-		).toBeVisible()
+		await expect(within(menu).getAllByRole('menuitem')).toHaveLength(3)
 
 		await userEvent.keyboard('{ArrowDown}')
-
-		await expect(
-			within(menu).getByRole('menuitem', { name: 'New file' })
-		).toHaveAttribute('data-highlighted')
+		await waitFor(
+			async () =>
+				await expect(
+					screen.getByRole('menuitem', { name: 'New file' })
+				).toHaveAttribute('data-highlighted')
+		)
 
 		await userEvent.keyboard('{Escape}')
 
-		await expect(menu).not.toBeVisible()
-		await expect(trigger).toHaveFocus()
-		await expect(trigger).toHaveAttribute('aria-expanded', 'false')
+		await waitFor(async () => {
+			await expect(screen.queryByRole('menu')).toBeNull()
+		})
+
+		await waitFor(async () => {
+			await expect(trigger).toHaveFocus()
+			await expect(trigger).toHaveAttribute('aria-expanded', 'false')
+		})
 
 		trigger.blur()
-
-		await expect(trigger).not.toHaveFocus()
 	}
 }
 
@@ -436,7 +436,7 @@ export const WithGap: Story = {
 
 				<Portal>
 					<Menu.Positioner>
-						<Menu.Content data-testid="content-root">
+						<Menu.Content data-testid="content">
 							<Menu.Surface>
 								<Menu.Item value="note_add">New file</Menu.Item>
 								<Menu.Item value="file_open">Open file...</Menu.Item>
@@ -461,10 +461,29 @@ export const WithGap: Story = {
 
 		await userEvent.keyboard('{Enter}')
 
-		const rootContent = await screen.findByTestId('content-root')
-		await expect(rootContent).toBeVisible()
+		const content = await screen.findByTestId('content')
+		await expect(content).toBeVisible()
 
-		await expect(rootContent).toHaveStyle({ gap: '2px' })
+		await waitFor(
+			async () =>
+				await expect(
+					within(content).getByRole('menuitem', { name: /New file/ })
+				).toHaveAttribute('data-highlighted')
+		)
+
+		await expect(content).toHaveStyle({ gap: '2px' })
+
+		await userEvent.keyboard('{Escape}')
+
+		await waitFor(async () => {
+			await expect(screen.queryByRole('menu')).toBeNull()
+		})
+
+		await waitFor(async () => {
+			await expect(trigger).toHaveFocus()
+		})
+
+		trigger.blur()
 	}
 }
 
@@ -489,7 +508,7 @@ export const WithSeparator: Story = {
 
 				<Portal>
 					<Menu.Positioner>
-						<Menu.Content data-testid="content-root">
+						<Menu.Content data-testid="content">
 							<Menu.Surface>
 								<Menu.Item value="note_add">New file</Menu.Item>
 								<Menu.Item value="file_open">Open file...</Menu.Item>
@@ -514,8 +533,15 @@ export const WithSeparator: Story = {
 
 		await userEvent.keyboard('{Enter}')
 
-		const rootContent = await screen.findByTestId('content-root')
-		await expect(rootContent).toBeVisible()
+		const content = await screen.findByTestId('content')
+		await expect(content).toBeVisible()
+
+		await waitFor(
+			async () =>
+				await expect(
+					within(content).getByRole('menuitem', { name: /New file/ })
+				).toHaveAttribute('data-highlighted')
+		)
 
 		const separator = await screen.findByTestId('separator')
 		await expect(separator).toBeVisible()
@@ -526,7 +552,9 @@ export const WithSeparator: Story = {
 		await expect(validParent).not.toBeNull()
 		await expect(validParent).toContainElement(separator)
 
-		const newFileItem = screen.getByRole('menuitem', { name: 'Open folder...' })
+		const newFileItem = screen.getByRole('menuitem', {
+			name: 'Open folder...'
+		})
 		const saveItem = screen.getByRole('menuitem', { name: 'Save' })
 		await expect(newFileItem).toBeVisible()
 		await expect(saveItem).toBeVisible()
@@ -538,12 +566,15 @@ export const WithSeparator: Story = {
 
 		await userEvent.keyboard('{Escape}')
 
-		await expect(rootContent).not.toBeVisible()
-		await expect(trigger).toHaveFocus()
+		await waitFor(async () => {
+			await expect(screen.queryByRole('menu')).toBeNull()
+		})
+
+		await waitFor(async () => {
+			await expect(trigger).toHaveFocus()
+		})
 
 		trigger.blur()
-
-		await expect(trigger).not.toHaveFocus()
 	}
 }
 
@@ -568,7 +599,7 @@ export const WithIcons: Story = {
 
 				<Portal>
 					<Menu.Positioner>
-						<Menu.Content data-testid="content-root">
+						<Menu.Content data-testid="content">
 							<Menu.Surface>
 								<Menu.Item
 									value="note_add"
@@ -623,8 +654,15 @@ export const WithIcons: Story = {
 
 		await userEvent.keyboard('{Enter}')
 
-		const rootContent = await screen.findByTestId('content-root')
-		await expect(rootContent).toBeVisible()
+		const content = await screen.findByTestId('content')
+		await expect(content).toBeVisible()
+
+		await waitFor(
+			async () =>
+				await expect(
+					within(content).getByRole('menuitem', { name: /New file/ })
+				).toHaveAttribute('data-highlighted')
+		)
 
 		const items = [
 			{ label: 'New file', icon: 'note_add', shortcut: 'Ctrl+N' },
@@ -652,8 +690,15 @@ export const WithIcons: Story = {
 
 		await userEvent.keyboard('{Escape}')
 
-		await expect(rootContent).not.toBeVisible()
-		await expect(trigger).toHaveFocus()
+		await waitFor(async () => {
+			await expect(screen.queryByRole('menu')).toBeNull()
+		})
+
+		await waitFor(async () => {
+			await expect(trigger).toHaveFocus()
+		})
+
+		trigger.blur()
 	}
 }
 
@@ -680,7 +725,7 @@ export const Group: Story = {
 
 				<Portal>
 					<Menu.Positioner>
-						<Menu.Content data-testid="content-root">
+						<Menu.Content data-testid="content">
 							<Menu.ItemGroup>
 								<Menu.ItemGroupLabel>File</Menu.ItemGroupLabel>
 								<Menu.Item value="note_add">New file</Menu.Item>
@@ -707,13 +752,22 @@ export const Group: Story = {
 
 		await userEvent.keyboard('{Enter}')
 
-		const rootContent = await screen.findByTestId('content-root')
+		const rootContent = await screen.findByTestId('content')
 		await expect(rootContent).toBeVisible()
+
+		await waitFor(
+			async () =>
+				await expect(
+					within(rootContent).getByRole('menuitem', { name: 'New file' })
+				).toHaveAttribute('data-highlighted')
+		)
 
 		const groups = rootContent.querySelectorAll('[role="group"]')
 		await expect(groups).toHaveLength(2)
 
-		const fileGroup = within(rootContent).getByRole('group', { name: /file/i })
+		const fileGroup = within(rootContent).getByRole('group', {
+			name: /file/i
+		})
 		await expect(fileGroup).toBeVisible()
 
 		const fileLabel = within(fileGroup).getByText('File')
@@ -734,7 +788,9 @@ export const Group: Story = {
 		await expect(openFileItem).toBeVisible()
 		await expect(openFolderItem).toBeVisible()
 
-		const editGroup = within(rootContent).getByRole('group', { name: /edit/i })
+		const editGroup = within(rootContent).getByRole('group', {
+			name: /edit/i
+		})
 		await expect(editGroup).toBeVisible()
 
 		const editLabel = within(editGroup).getByText('Edit')
@@ -762,12 +818,15 @@ export const Group: Story = {
 
 		await userEvent.keyboard('{Escape}')
 
-		await expect(rootContent).not.toBeVisible()
-		await expect(trigger).toHaveFocus()
+		await waitFor(async () => {
+			await expect(screen.queryByRole('menu')).toBeNull()
+		})
+
+		await waitFor(async () => {
+			await expect(trigger).toHaveFocus()
+		})
 
 		trigger.blur()
-
-		await expect(trigger).not.toHaveFocus()
 	}
 }
 
@@ -789,7 +848,7 @@ export const Selection: Story = {
 		const [style, setStyle] = useState<Set<string | number> | 'all'>(
 			new Set(['bold'])
 		)
-		const [align, setAlign] = useState<Key | null>(null)
+		const [align, setAlign] = useState<Key | null>('left')
 
 		return (
 			<Menu.Root gap={args.gap}>
@@ -799,7 +858,7 @@ export const Selection: Story = {
 
 				<Portal>
 					<Menu.Positioner>
-						<Menu.Content data-testid="content-root">
+						<Menu.Content data-testid="content">
 							<Menu.ItemGroup>
 								<Menu.ItemGroupLabel>Font style</Menu.ItemGroupLabel>
 								<Menu.OptionItem
@@ -939,11 +998,13 @@ export const Selection: Story = {
 
 		await userEvent.keyboard('{Enter}')
 
-		const menu = await screen.findByTestId('content-root')
+		const menu = await screen.findByTestId('content')
 		await expect(menu).toBeVisible()
 
 		const boldItem = screen.getByRole('menuitemcheckbox', { name: 'Bold' })
-		const italicItem = screen.getByRole('menuitemcheckbox', { name: 'Italic' })
+		const italicItem = screen.getByRole('menuitemcheckbox', {
+			name: 'Italic'
+		})
 		const underlineItem = screen.getByRole('menuitemcheckbox', {
 			name: 'Underline'
 		})
@@ -953,52 +1014,44 @@ export const Selection: Story = {
 		await expect(underlineItem).toHaveAttribute('aria-checked', 'false')
 
 		await userEvent.click(italicItem)
-
 		await expect(italicItem).toHaveAttribute('aria-checked', 'true')
-		await expect(menu).toBeVisible()
-		await expect(boldItem).toHaveAttribute('aria-checked', 'true')
-
-		await userEvent.click(boldItem)
-
-		await expect(boldItem).toHaveAttribute('aria-checked', 'false')
-		await expect(italicItem).toHaveAttribute('aria-checked', 'true')
-
 		await userEvent.click(underlineItem)
-
 		await expect(underlineItem).toHaveAttribute('aria-checked', 'true')
-		await expect(italicItem).toHaveAttribute('aria-checked', 'true')
-		await expect(boldItem).toHaveAttribute('aria-checked', 'false')
+
+		await userEvent.click(italicItem)
+		await expect(italicItem).toHaveAttribute('aria-checked', 'false')
+		await userEvent.click(underlineItem)
+		await expect(underlineItem).toHaveAttribute('aria-checked', 'false')
 
 		const leftItem = screen.getByRole('menuitemradio', { name: 'Left' })
 		const centerItem = screen.getByRole('menuitemradio', { name: 'Center' })
 		const rightItem = screen.getByRole('menuitemradio', { name: 'Right' })
 
-		await expect(leftItem).toHaveAttribute('aria-checked', 'false')
+		await expect(leftItem).toHaveAttribute('aria-checked', 'true')
 		await expect(centerItem).toHaveAttribute('aria-checked', 'false')
 		await expect(rightItem).toHaveAttribute('aria-checked', 'false')
 
 		await userEvent.click(centerItem)
-
-		await expect(centerItem).toHaveAttribute('aria-checked', 'true')
 		await expect(leftItem).toHaveAttribute('aria-checked', 'false')
+		await expect(centerItem).toHaveAttribute('aria-checked', 'true')
 		await expect(rightItem).toHaveAttribute('aria-checked', 'false')
 
-		await userEvent.click(rightItem)
-
-		await expect(rightItem).toHaveAttribute('aria-checked', 'true')
+		await userEvent.click(leftItem)
+		await expect(leftItem).toHaveAttribute('aria-checked', 'true')
+		await expect(rightItem).toHaveAttribute('aria-checked', 'false')
 		await expect(centerItem).toHaveAttribute('aria-checked', 'false')
-		await expect(leftItem).toHaveAttribute('aria-checked', 'false')
-
-		await expect(menu).toBeVisible()
 
 		await userEvent.keyboard('{Escape}')
 
-		await expect(menu).not.toBeVisible()
-		await expect(trigger).toHaveFocus()
+		await waitFor(async () => {
+			await expect(screen.queryByRole('menu')).toBeNull()
+		})
+
+		await waitFor(async () => {
+			await expect(trigger).toHaveFocus()
+		})
 
 		trigger.blur()
-
-		await expect(trigger).not.toHaveFocus()
 	}
 }
 
@@ -1112,47 +1165,121 @@ export const Nested: Story = {
 		const rootContent = await screen.findByTestId('content-root')
 		await expect(rootContent).toBeVisible()
 
-		await userEvent.keyboard('{ArrowDown}{ArrowDown}{ArrowDown}')
+		await waitFor(
+			async () =>
+				await expect(
+					within(rootContent).getByRole('menuitem', { name: 'New file' })
+				).toHaveAttribute('data-highlighted')
+		)
 
-		const editTrigger = screen.getByRole('menuitem', { name: 'Edit' })
-		await expect(editTrigger).toHaveAttribute('data-highlighted')
+		await userEvent.keyboard('{ArrowDown}')
+		await waitFor(
+			async () =>
+				await expect(
+					within(rootContent).getByRole('menuitem', { name: 'Open file...' })
+				).toHaveAttribute('data-highlighted')
+		)
+		await userEvent.keyboard('{ArrowDown}')
+		await waitFor(async () => {
+			await expect(
+				within(rootContent).getByRole('menuitem', { name: 'Open folder...' })
+			).toHaveAttribute('data-highlighted')
+		})
+		await userEvent.keyboard('{ArrowDown}')
+		await waitFor(async () => {
+			await expect(
+				within(rootContent).getByRole('menuitem', { name: 'Edit' })
+			).toHaveAttribute('data-highlighted')
+		})
 
 		await userEvent.keyboard('{Enter}')
 
 		const editContent = await screen.findByTestId('content-edit')
 		await expect(editContent).toBeVisible()
 
-		await userEvent.keyboard('{ArrowDown}{ArrowDown}')
+		await waitFor(
+			async () =>
+				await expect(
+					within(editContent).getByRole('menuitem', { name: 'Undo' })
+				).toHaveAttribute('data-highlighted')
+		)
 
-		const clipboardTrigger = screen.getByRole('menuitem', { name: 'Clipboard' })
-		await expect(clipboardTrigger).toHaveAttribute('data-highlighted')
+		await userEvent.keyboard('{ArrowDown}')
+		await waitFor(
+			async () =>
+				await expect(
+					within(editContent).getByRole('menuitem', { name: 'Redo' })
+				).toHaveAttribute('data-highlighted')
+		)
+		await userEvent.keyboard('{ArrowDown}')
+		await waitFor(async () => {
+			await expect(
+				within(editContent).getByRole('menuitem', { name: 'Clipboard' })
+			).toHaveAttribute('data-highlighted')
+		})
 
 		await userEvent.keyboard('{Enter}')
 
 		const clipboardContent = await screen.findByTestId('content-clipboard')
 		await expect(clipboardContent).toBeVisible()
 
-		await userEvent.keyboard('{Escape}{Escape}{ArrowDown}')
+		await waitFor(
+			async () =>
+				await expect(
+					within(clipboardContent).getByRole('menuitem', { name: 'Cut' })
+				).toHaveAttribute('data-highlighted')
+		)
 
-		const selectionTrigger = screen.getByRole('menuitem', { name: 'Selection' })
-		await expect(clipboardContent).not.toBeVisible()
-		await expect(editContent).not.toBeVisible()
-		await expect(selectionTrigger).toHaveAttribute('data-highlighted')
+		await userEvent.keyboard('{Escape}')
+		await waitFor(async () => {
+			await expect(
+				within(editContent).getByRole('menuitem', { name: 'Clipboard' })
+			).toHaveAttribute('data-highlighted')
+		})
+		await userEvent.keyboard('{Escape}')
+		await waitFor(async () => {
+			await expect(
+				within(rootContent).getByRole('menuitem', { name: 'Edit' })
+			).toHaveAttribute('data-highlighted')
+		})
+		await userEvent.keyboard('{ArrowDown}')
+		await waitFor(async () => {
+			await expect(
+				within(rootContent).getByRole('menuitem', { name: 'Selection' })
+			).toHaveAttribute('data-highlighted')
+		})
 
 		await userEvent.keyboard('{Enter}')
 
 		const selectionContent = await screen.findByTestId('content-selection')
 		await expect(selectionContent).toBeVisible()
 
-		await userEvent.keyboard('{Escape}{Escape}')
+		await waitFor(async () => {
+			await expect(
+				within(selectionContent).getByRole('menuitem', { name: 'Select all' })
+			).toHaveAttribute('data-highlighted')
+		})
 
-		await expect(rootContent).not.toBeVisible()
-		await expect(selectionContent).not.toBeVisible()
-		await expect(rootTrigger).toHaveFocus()
+		await userEvent.keyboard('{Escape}')
+		await waitFor(async () => {
+			await expect(
+				within(rootContent).getByRole('menuitem', { name: 'Selection' })
+			).toHaveAttribute('data-highlighted')
+		})
+		await userEvent.keyboard('{Escape}')
+
+		await waitFor(async () => {
+			await expect(screen.queryByTestId('content-clipboard')).not.toBeVisible()
+			await expect(screen.queryByTestId('content-edit')).not.toBeVisible()
+			await expect(screen.queryByTestId('content-selection')).not.toBeVisible()
+			await expect(screen.queryByTestId('content-root')).not.toBeVisible()
+		})
+
+		await waitFor(async () => {
+			await expect(rootTrigger).toHaveFocus()
+		})
 
 		rootTrigger.blur()
-
-		await expect(rootTrigger).not.toHaveFocus()
 	}
 }
 
@@ -1287,10 +1414,32 @@ export const WithArrow: Story = {
 		await expect(rootArrow).toBeVisible()
 		await expect(rootArrowTip).toBeVisible()
 
-		await userEvent.keyboard('{ArrowDown}{ArrowDown}{ArrowDown}')
+		await waitFor(
+			async () =>
+				await expect(
+					within(rootContent).getByRole('menuitem', { name: 'New file' })
+				).toHaveAttribute('data-highlighted')
+		)
 
-		const editTrigger = screen.getByRole('menuitem', { name: 'Edit' })
-		await expect(editTrigger).toHaveAttribute('data-highlighted')
+		await userEvent.keyboard('{ArrowDown}')
+		await waitFor(
+			async () =>
+				await expect(
+					within(rootContent).getByRole('menuitem', { name: 'Open file...' })
+				).toHaveAttribute('data-highlighted')
+		)
+		await userEvent.keyboard('{ArrowDown}')
+		await waitFor(async () => {
+			await expect(
+				within(rootContent).getByRole('menuitem', { name: 'Open folder...' })
+			).toHaveAttribute('data-highlighted')
+		})
+		await userEvent.keyboard('{ArrowDown}')
+		await waitFor(async () => {
+			await expect(
+				within(rootContent).getByRole('menuitem', { name: 'Edit' })
+			).toHaveAttribute('data-highlighted')
+		})
 
 		await userEvent.keyboard('{Enter}')
 
@@ -1301,15 +1450,30 @@ export const WithArrow: Story = {
 		await expect(editArrow).toBeVisible()
 		await expect(editArrowTip).toBeVisible()
 
-		await userEvent.keyboard('{ArrowDown}{ArrowDown}')
+		await waitFor(
+			async () =>
+				await expect(
+					within(editContent).getByRole('menuitem', { name: 'Undo' })
+				).toHaveAttribute('data-highlighted')
+		)
 
-		const clipboardTrigger = screen.getByRole('menuitem', { name: 'Clipboard' })
-		await expect(clipboardTrigger).toHaveAttribute('data-highlighted')
+		await userEvent.keyboard('{ArrowDown}')
+		await waitFor(
+			async () =>
+				await expect(
+					within(editContent).getByRole('menuitem', { name: 'Redo' })
+				).toHaveAttribute('data-highlighted')
+		)
+		await userEvent.keyboard('{ArrowDown}')
+		await waitFor(async () => {
+			await expect(
+				within(editContent).getByRole('menuitem', { name: 'Clipboard' })
+			).toHaveAttribute('data-highlighted')
+		})
 
 		await userEvent.keyboard('{Enter}')
 
 		const clipboardContent = await screen.findByTestId('content-clipboard')
-
 		await expect(clipboardContent).toBeVisible()
 		const clipboardArrow = clipboardContent.querySelector('[data-part="arrow"]')
 		const clipboardArrowTip = clipboardContent.querySelector(
@@ -1318,12 +1482,31 @@ export const WithArrow: Story = {
 		await expect(clipboardArrow).toBeVisible()
 		await expect(clipboardArrowTip).toBeVisible()
 
-		await userEvent.keyboard('{Escape}{Escape}{ArrowDown}')
+		await waitFor(
+			async () =>
+				await expect(
+					within(clipboardContent).getByRole('menuitem', { name: 'Cut' })
+				).toHaveAttribute('data-highlighted')
+		)
 
-		const selectionTrigger = screen.getByRole('menuitem', { name: 'Selection' })
-		await expect(clipboardContent).not.toBeVisible()
-		await expect(editContent).not.toBeVisible()
-		await expect(selectionTrigger).toHaveAttribute('data-highlighted')
+		await userEvent.keyboard('{Escape}')
+		await waitFor(async () => {
+			await expect(
+				within(editContent).getByRole('menuitem', { name: 'Clipboard' })
+			).toHaveAttribute('data-highlighted')
+		})
+		await userEvent.keyboard('{Escape}')
+		await waitFor(async () => {
+			await expect(
+				within(rootContent).getByRole('menuitem', { name: 'Edit' })
+			).toHaveAttribute('data-highlighted')
+		})
+		await userEvent.keyboard('{ArrowDown}')
+		await waitFor(async () => {
+			await expect(
+				within(rootContent).getByRole('menuitem', { name: 'Selection' })
+			).toHaveAttribute('data-highlighted')
+		})
 
 		await userEvent.keyboard('{Enter}')
 
@@ -1336,15 +1519,32 @@ export const WithArrow: Story = {
 		await expect(selectionArrow).toBeVisible()
 		await expect(selectionArrowTip).toBeVisible()
 
-		await userEvent.keyboard('{Escape}{Escape}')
+		await waitFor(async () => {
+			await expect(
+				within(selectionContent).getByRole('menuitem', { name: 'Select all' })
+			).toHaveAttribute('data-highlighted')
+		})
 
-		await expect(rootContent).not.toBeVisible()
-		await expect(selectionContent).not.toBeVisible()
-		await expect(rootTrigger).toHaveFocus()
+		await userEvent.keyboard('{Escape}')
+		await waitFor(async () => {
+			await expect(
+				within(rootContent).getByRole('menuitem', { name: 'Selection' })
+			).toHaveAttribute('data-highlighted')
+		})
+		await userEvent.keyboard('{Escape}')
+
+		await waitFor(async () => {
+			await expect(screen.queryByTestId('content-clipboard')).not.toBeVisible()
+			await expect(screen.queryByTestId('content-edit')).not.toBeVisible()
+			await expect(screen.queryByTestId('content-selection')).not.toBeVisible()
+			await expect(screen.queryByTestId('content-root')).not.toBeVisible()
+		})
+
+		await waitFor(async () => {
+			await expect(rootTrigger).toHaveFocus()
+		})
 
 		rootTrigger.blur()
-
-		await expect(rootTrigger).not.toHaveFocus()
 	}
 }
 
@@ -1444,26 +1644,35 @@ export const SharedContent: Story = {
 	},
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement)
-		const triggerA = canvas.getByRole('button', { name: 'File' })
-		const triggerB = canvas.getByRole('button', { name: 'Edit' })
+		const fileTrigger = canvas.getByRole('button', { name: 'File' })
+		const editTrigger = canvas.getByRole('button', { name: 'Edit' })
 
-		await userEvent.click(triggerA)
+		await userEvent.click(fileTrigger)
 
-		const menu = await screen.findByRole('menu')
-
-		await expect(menu).toBeVisible()
-		await expect(menu).toHaveTextContent('New file')
-
-		await userEvent.click(triggerB)
-
-		await expect(menu).toBeVisible()
-		await expect(menu).toHaveTextContent('Cut')
-
-		await userEvent.click(triggerB)
+		const content = await screen.findByRole('menu')
+		await expect(content).toBeVisible()
 
 		await expect(
-			await screen.findByRole('menu', { hidden: true })
-		).not.toBeVisible()
+			await within(content).findByRole('menuitem', { name: 'New file' })
+		).toBeInTheDocument()
+
+		await userEvent.click(editTrigger)
+
+		await expect(
+			await within(content).findByRole('menuitem', { name: 'Cut' })
+		).toBeInTheDocument()
+
+		await userEvent.click(editTrigger)
+
+		await waitFor(async () => {
+			await expect(screen.queryByRole('menu')).toBeNull()
+		})
+
+		await waitFor(async () => {
+			await expect(editTrigger).toHaveFocus()
+		})
+
+		editTrigger.blur()
 	}
 }
 
@@ -1517,28 +1726,28 @@ export const RootProvider: Story = {
 		const menu = await screen.findByRole('menu')
 		await expect(menu).toBeVisible()
 		await expect(trigger).toHaveAttribute('aria-expanded', 'true')
-
-		const items = within(menu).getAllByRole('menuitem')
-		await expect(items).toHaveLength(3)
-		await expect(
-			within(menu).getByRole('menuitem', { name: 'New file' })
-		).toBeVisible()
+		await expect(within(menu).getAllByRole('menuitem')).toHaveLength(3)
 
 		await userEvent.keyboard('{ArrowDown}')
-
-		await expect(
-			within(menu).getByRole('menuitem', { name: 'New file' })
-		).toHaveAttribute('data-highlighted')
+		await waitFor(
+			async () =>
+				await expect(
+					screen.getByRole('menuitem', { name: 'New file' })
+				).toHaveAttribute('data-highlighted')
+		)
 
 		await userEvent.keyboard('{Escape}')
 
-		await expect(menu).not.toBeVisible()
-		await expect(trigger).toHaveFocus()
-		await expect(trigger).toHaveAttribute('aria-expanded', 'false')
+		await waitFor(async () => {
+			await expect(screen.queryByRole('menu')).toBeNull()
+		})
+
+		await waitFor(async () => {
+			await expect(trigger).toHaveFocus()
+			await expect(trigger).toHaveAttribute('aria-expanded', 'false')
+		})
 
 		trigger.blur()
-
-		await expect(trigger).not.toHaveFocus()
 	}
 }
 
@@ -1970,41 +2179,53 @@ export const WithAnimation: Story = {
 		document.addEventListener('animationstart', onanimationstart)
 		document.addEventListener('animationend', onanimationend)
 
-		const content = await screen.findByTestId('content')
-		await expect(content).not.toBeVisible()
+		try {
+			await expect(screen.queryByRole('menu')).toBeNull()
 
-		await userEvent.tab()
+			await userEvent.tab()
 
-		await expect(trigger).toHaveFocus()
+			await expect(trigger).toHaveFocus()
 
-		await userEvent.keyboard('{Enter}')
+			await userEvent.keyboard('{Enter}')
 
-		await waitFor(async () => {
-			await expect(onanimationstart).toHaveBeenCalled()
-			await expect(onanimationend).toHaveBeenCalled()
-		})
+			await waitFor(async () => {
+				await expect(onanimationstart).toHaveBeenCalled()
+				await expect(onanimationend).toHaveBeenCalled()
+			})
 
-		onanimationstart.mockClear()
-		onanimationend.mockClear()
+			onanimationstart.mockClear()
+			onanimationend.mockClear()
 
-		await expect(content).toBeVisible()
-		await expect(content).not.toHaveStyle({
-			display: 'none'
-		})
-		await expect(content).toHaveAttribute('data-state', 'open')
+			const content = await screen.findByRole('menu')
+			await expect(content).toBeVisible()
+			await expect(content).toHaveAttribute('data-state', 'open')
 
-		await userEvent.keyboard('{Escape}')
+			await expect(
+				await within(content).findByRole('menuitem', { name: /New file/ })
+			).toBeInTheDocument()
 
-		await expect(content).toHaveAttribute('data-state', 'closed')
+			await userEvent.keyboard('{Escape}')
 
-		await waitFor(async () => {
-			await expect(onanimationstart).toHaveBeenCalled()
-			await expect(onanimationend).toHaveBeenCalled()
-		})
+			await expect(content).toHaveAttribute('data-state', 'closed')
 
-		await expect(content).not.toBeVisible()
-		await expect(content).not.toBeNull()
+			await waitFor(async () => {
+				await expect(onanimationstart).toHaveBeenCalled()
+				await expect(onanimationend).toHaveBeenCalled()
+			})
 
-		trigger.blur()
+			await waitFor(async () => {
+				await expect(screen.queryByRole('menu')).toBeNull()
+			})
+
+			await waitFor(async () => {
+				await expect(trigger).toHaveFocus()
+				await expect(trigger).toHaveAttribute('aria-expanded', 'false')
+			})
+
+			trigger.blur()
+		} finally {
+			document.removeEventListener('animationstart', onanimationstart)
+			document.removeEventListener('animationend', onanimationend)
+		}
 	}
 }
