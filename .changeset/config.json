@@ -1,11 +1,16 @@
 {
-	"$schema": "https://unpkg.com/@changesets/config@3.1.4/schema.json",
-	"changelog": ["./changelog-generator.js", { "repo": "die-goncalves/iolita" }],
+	"$schema": "https://unpkg.com/@changesets/config@4.0.1/schema.json",
+	"changelog": [
+		"@changesets/changelog-github",
+		{ "repo": "die-goncalves/iolita" }
+	],
 	"commit": false,
 	"fixed": [],
 	"linked": [],
 	"access": "restricted",
 	"baseBranch": "main",
+	"format": "auto",
+	"privatePackages": { "version": true, "tag": true },
 	"updateInternalDependencies": "patch",
 	"ignore": ["@iolita/docs"]
 }
