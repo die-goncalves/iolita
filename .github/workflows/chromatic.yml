@@ -1,6 +1,17 @@
 name: "Chromatic Deployment"
 
-on: push
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 jobs:
   chromatic:
@@ -24,9 +35,17 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Generate Panda CSS
+        run: pnpm --filter @iolita/styled-system run prepare
+
       - name: Publish to Chromatic
         uses: chromaui/action@latest
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           workingDir: packages/docs
           buildScriptName: build-storybook
+          skip: "changeset-release/**"
+          autoAcceptChanges: main
+          onlyChanged: true
+          externals: |
+            packages/preset/**
