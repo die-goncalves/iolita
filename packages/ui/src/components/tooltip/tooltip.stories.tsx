@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Portal } from '@zag-js/react'
 import type * as zTooltip from '@zag-js/tooltip'
 import { type ComponentProps, type ReactNode, useState } from 'react'
-import { expect, fn, userEvent, waitFor, within } from 'storybook/test'
+import { expect, fn, screen, userEvent, waitFor, within } from 'storybook/test'
 import { Button } from '../button'
 import { Presence } from '../presence'
 import { Tooltip } from '.'
@@ -42,7 +42,9 @@ const meta = {
 				<Button variant="ghost">Tooltip</Button>
 			</Tooltip.Trigger>
 			<Tooltip.Positioner>
-				<Tooltip.Content>{tooltipText}</Tooltip.Content>
+				<Tooltip.Content>
+					<Tooltip.Body>{tooltipText}</Tooltip.Body>
+				</Tooltip.Content>
 			</Tooltip.Positioner>
 		</Tooltip.Root>
 	),
@@ -384,7 +386,9 @@ export const Timing: Story = {
 						<Button variant="ghost">Tooltip</Button>
 					</Tooltip.Trigger>
 					<Tooltip.Positioner>
-						<Tooltip.Content>tooltip content</Tooltip.Content>
+						<Tooltip.Content>
+							<Tooltip.Body>tooltip content</Tooltip.Body>
+						</Tooltip.Content>
 					</Tooltip.Positioner>
 				</Tooltip.Root>
 			</div>
@@ -471,10 +475,13 @@ export const WithArrow: Story = {
 						<Button variant="ghost">Tooltip</Button>
 					</Tooltip.Trigger>
 					<Tooltip.Positioner>
-						<Tooltip.Content>tooltip content</Tooltip.Content>
-						<Tooltip.Arrow>
-							<Tooltip.ArrowTip />
-						</Tooltip.Arrow>
+						<Tooltip.Content>
+							<Tooltip.Arrow>
+								<Tooltip.ArrowTip />
+							</Tooltip.Arrow>
+
+							<Tooltip.Body>tooltip content</Tooltip.Body>
+						</Tooltip.Content>
 					</Tooltip.Positioner>
 				</Tooltip.Root>
 			</div>
@@ -541,7 +548,9 @@ export const Placement: Story = {
 						<Button variant="ghost">Tooltip</Button>
 					</Tooltip.Trigger>
 					<Tooltip.Positioner>
-						<Tooltip.Content>tooltip content</Tooltip.Content>
+						<Tooltip.Content>
+							<Tooltip.Body>tooltip content</Tooltip.Body>
+						</Tooltip.Content>
 					</Tooltip.Positioner>
 				</Tooltip.Root>
 			</div>
@@ -609,7 +618,9 @@ export const Collision: Story = {
 						</Button>
 					</Tooltip.Trigger>
 					<Tooltip.Positioner>
-						<Tooltip.Content>{args.tooltipText}</Tooltip.Content>
+						<Tooltip.Content>
+							<Tooltip.Body>{args.tooltipText}</Tooltip.Body>
+						</Tooltip.Content>
 					</Tooltip.Positioner>
 				</Tooltip.Root>
 
@@ -631,7 +642,9 @@ export const Collision: Story = {
 						</Button>
 					</Tooltip.Trigger>
 					<Tooltip.Positioner>
-						<Tooltip.Content>{args.tooltipText}</Tooltip.Content>
+						<Tooltip.Content>
+							<Tooltip.Body>{args.tooltipText}</Tooltip.Body>
+						</Tooltip.Content>
 					</Tooltip.Positioner>
 				</Tooltip.Root>
 
@@ -653,7 +666,9 @@ export const Collision: Story = {
 						</Button>
 					</Tooltip.Trigger>
 					<Tooltip.Positioner>
-						<Tooltip.Content>{args.tooltipText}</Tooltip.Content>
+						<Tooltip.Content>
+							<Tooltip.Body>{args.tooltipText}</Tooltip.Body>
+						</Tooltip.Content>
 					</Tooltip.Positioner>
 				</Tooltip.Root>
 
@@ -675,7 +690,9 @@ export const Collision: Story = {
 						</Button>
 					</Tooltip.Trigger>
 					<Tooltip.Positioner>
-						<Tooltip.Content>{args.tooltipText}</Tooltip.Content>
+						<Tooltip.Content>
+							<Tooltip.Body>{args.tooltipText}</Tooltip.Body>
+						</Tooltip.Content>
 					</Tooltip.Positioner>
 				</Tooltip.Root>
 			</div>
@@ -791,7 +808,9 @@ export const SharedContent: Story = {
 					</div>
 
 					<Tooltip.Positioner>
-						<Tooltip.Content>{activeTooltip?.content}</Tooltip.Content>
+						<Tooltip.Content>
+							<Tooltip.Body>{activeTooltip?.content}</Tooltip.Body>
+						</Tooltip.Content>
 					</Tooltip.Positioner>
 				</Tooltip.Root>
 			</div>
@@ -821,6 +840,127 @@ export const SharedContent: Story = {
 		})
 
 		await userEvent.unhover(triggerB)
+	}
+}
+
+/**
+ * Demonstrates the component with an internal scrollable region (`Tooltip.ScrollArea`).
+ * Useful for displaying long content or paragraphs within a fixed or constrained space
+ * without overflowing the viewport layout.
+ */
+export const WithScroll: Story = {
+	args: {
+		children: '',
+		tooltipText:
+			'Tenuis solum minima vestrum. Comprehendo quibusdam nobis veritatis sopor benigne. Usque dignissimos audeo reprehenderit admitto amplitudo crepusculum cimentarius. Sapiente auctus vulnus tergo virgo nisi tardus cognatus blanditiis brevis. Tabesco delectus tempora ex vae crepusculum venia. Veritas sodalitas commemoro coepi sulum sollers pecus supplanto texo.',
+		closeOnScroll: false
+	},
+	parameters: {
+		controls: {
+			include: ['placement', 'arrowPadding', 'tooltipText']
+		}
+	},
+	render: ({ placement, gutter, overflowPadding, arrowPadding, ...args }) => {
+		const [container, setContainer] = useState<HTMLDivElement | null>(null)
+
+		return (
+			<div
+				className={css({
+					position: 'relative',
+					display: 'flex',
+					justifyContent: 'center',
+					alignItems: 'center',
+					padding: '2',
+					boxSizing: 'border-box',
+					borderWidth: 'thin',
+					borderStyle: 'dashed',
+					width: 'var(--sizes-64)',
+					minHeight: 'calc(var(--sizes-48) + 1px * 2)',
+					borderColor: 'violet.800'
+				})}
+				ref={setContainer}
+			>
+				<Tooltip.Root
+					{...args}
+					positioning={{
+						placement,
+						boundary: () => (container ? [container] : []),
+						gutter,
+						overflowPadding,
+						arrowPadding
+					}}
+				>
+					<Tooltip.Trigger asChild>
+						<Button variant="ghost">Tooltip</Button>
+					</Tooltip.Trigger>
+					<Tooltip.Positioner>
+						<Tooltip.Content>
+							<Tooltip.Arrow>
+								<Tooltip.ArrowTip />
+							</Tooltip.Arrow>
+
+							<Tooltip.ScrollArea>
+								<Tooltip.ScrollAreaViewport data-testid="scroll-area-viewport">
+									<Tooltip.Body>{args.tooltipText}</Tooltip.Body>
+								</Tooltip.ScrollAreaViewport>
+							</Tooltip.ScrollArea>
+						</Tooltip.Content>
+					</Tooltip.Positioner>
+				</Tooltip.Root>
+			</div>
+		)
+	},
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement)
+		const trigger = canvas.getByRole('button', { name: 'Tooltip' })
+
+		const content = await canvas.findByRole('tooltip', { hidden: true })
+
+		await waitFor(async () => {
+			await expect(content).toHaveAttribute('data-state', 'closed')
+		})
+
+		await userEvent.hover(trigger)
+
+		await waitFor(async () => {
+			await expect(content).toHaveAttribute('data-state', 'open')
+		})
+
+		await within(content).findByText(/Tenuis solum minima/i)
+
+		const viewport = await within(content).findByTestId('scroll-area-viewport')
+
+		await expect(viewport.scrollHeight).toBeGreaterThan(viewport.clientHeight)
+
+		await expect(viewport.scrollTop).toBe(0)
+		viewport.scrollTop = 50
+		viewport.dispatchEvent(new Event('scroll', { bubbles: true }))
+		await waitFor(() => expect(viewport.scrollTop).toBeGreaterThan(0))
+
+		viewport.scrollTop = viewport.scrollHeight
+		viewport.dispatchEvent(new Event('scroll', { bubbles: true }))
+
+		await waitFor(
+			async () =>
+				await expect(viewport.scrollTop).toBeCloseTo(
+					viewport.scrollHeight - viewport.clientHeight,
+					0
+				)
+		)
+
+		viewport.scrollTop = 0
+		viewport.dispatchEvent(new Event('scroll', { bubbles: true }))
+		await waitFor(async () => await expect(viewport.scrollTop).toBe(0))
+
+		await userEvent.unhover(trigger)
+
+		const closedContent = await canvas.findByRole('tooltip', {
+			hidden: true
+		})
+		await waitFor(async () => {
+			await expect(closedContent).toHaveAttribute('data-state', 'closed')
+		})
+		await waitFor(async () => await expect(closedContent).not.toBeVisible())
 	}
 }
 
@@ -869,10 +1009,13 @@ export const RootProvider: Story = {
 						<Button variant="ghost">tooltip</Button>
 					</Tooltip.Trigger>
 					<Tooltip.Positioner>
-						<Tooltip.Arrow data-testid="arrow">
-							<Tooltip.ArrowTip />
-						</Tooltip.Arrow>
-						<Tooltip.Content>{args.tooltipText}</Tooltip.Content>
+						<Tooltip.Content>
+							<Tooltip.Arrow data-testid="arrow">
+								<Tooltip.ArrowTip />
+							</Tooltip.Arrow>
+
+							<Tooltip.Body>{args.tooltipText}</Tooltip.Body>
+						</Tooltip.Content>
 					</Tooltip.Positioner>
 				</Tooltip.RootProvider>
 			</div>
@@ -940,7 +1083,7 @@ export const WithAnimation: Story = {
 			]
 		}
 	},
-	render: args => {
+	render: ({ placement, gutter, overflowPadding, arrowPadding, ...args }) => {
 		const [open, setOpen] = useState(false)
 		const [container, setContainer] = useState<HTMLDivElement | null>(null)
 
@@ -963,11 +1106,12 @@ export const WithAnimation: Story = {
 					open={open}
 					onOpenChange={({ open }) => setOpen(open)}
 					positioning={{
+						placement,
 						strategy: 'absolute',
 						boundary: () => (container ? [container] : []),
-						gutter: args.gutter,
-						overflowPadding: args.overflowPadding,
-						arrowPadding: args.arrowPadding
+						gutter,
+						overflowPadding,
+						arrowPadding
 					}}
 				>
 					<Tooltip.Trigger asChild>
@@ -979,54 +1123,48 @@ export const WithAnimation: Story = {
 							<Portal container={{ current: container }}>
 								<Tooltip.Positioner>
 									<Presence.Gate
+										asChild
 										className={css({
+											position: 'relative',
+											'&[data-placement^=top]': {
+												'--slide-offset-y': 'var(--spacing-2)'
+											},
+											'&[data-placement^=bottom]': {
+												'--slide-offset-y': 'calc(var(--spacing-2) * -1)'
+											},
+											'&[data-placement^=left]': {
+												'--slide-offset-x': 'var(--spacing-2)'
+											},
+											'&[data-placement^=right]': {
+												'--slide-offset-x': 'calc(var(--spacing-2) * -1)'
+											},
 											_open: {
-												willChange: 'translate, opacity',
+												willChange:
+													'inset-block-start, inset-inline-start, opacity',
 												animationDuration: '500ms, 200ms',
+												animationName: 'slide-in, fade-in',
 												animationTimingFunction:
-													'var(--easings-m3-exp-spatial), var(--easings-m3-exp-effects)',
-												'&:has([data-placement^=top])': {
-													animationName: 'slide-from-bottom, fade-in'
-												},
-												'&:has([data-placement^=right])': {
-													animationName: 'slide-from-left, fade-in'
-												},
-												'&:has([data-placement^=bottom])': {
-													animationName: 'slide-from-top, fade-in'
-												},
-												'&:has([data-placement^=left])': {
-													animationName: 'slide-from-right, fade-in'
-												}
+													'var(--easings-m3-exp-spatial), var(--easings-m3-exp-effects)'
 											},
 											_closed: {
 												animationDuration: '350ms, 150ms',
+												animationName: 'slide-out, fade-out',
 												animationTimingFunction:
-													'var(--easings-m3-exp-fast-spatial), var(--easings-m3-exp-fast-effects)',
-												'&:has([data-placement^=top])': {
-													animationName: 'slide-to-bottom, fade-out'
-												},
-												'&:has([data-placement^=right])': {
-													animationName: 'slide-to-left, fade-out'
-												},
-												'&:has([data-placement^=bottom])': {
-													animationName: 'slide-to-top, fade-out'
-												},
-												'&:has([data-placement^=left])': {
-													animationName: 'slide-to-right, fade-out'
-												}
+													'var(--easings-m3-exp-fast-spatial), var(--easings-m3-exp-fast-effects)'
 											}
 										})}
 									>
-										{props => (
-											<>
-												<Tooltip.Arrow {...props}>
-													<Tooltip.ArrowTip />
-												</Tooltip.Arrow>
-												<Tooltip.Content {...props}>
-													{args.tooltipText}
-												</Tooltip.Content>
-											</>
-										)}
+										<Tooltip.Content>
+											<Tooltip.Arrow>
+												<Tooltip.ArrowTip />
+											</Tooltip.Arrow>
+
+											<Tooltip.ScrollArea>
+												<Tooltip.ScrollAreaViewport>
+													<Tooltip.Body>{args.tooltipText}</Tooltip.Body>
+												</Tooltip.ScrollAreaViewport>
+											</Tooltip.ScrollArea>
+										</Tooltip.Content>
 									</Presence.Gate>
 								</Tooltip.Positioner>
 							</Portal>
@@ -1036,46 +1174,85 @@ export const WithAnimation: Story = {
 			</div>
 		)
 	},
-	play: async ({ args, canvasElement }) => {
+	play: async ({ canvasElement }) => {
+		const onanimationstart = fn()
+		const onanimationend = fn()
+		document.addEventListener('animationstart', onanimationstart)
+		document.addEventListener('animationend', onanimationend)
+
 		const canvas = within(canvasElement)
-		const trigger = canvas.getByRole('button', { name: 'tooltip' })
+		const trigger = await canvas.findByRole('button', { name: 'tooltip' })
 
-		const MAX_EXTRA = 1000
-		const openDelay = args.openDelay ?? 0
-		const closeDelay = args.closeDelay ?? 0
+		try {
+			await userEvent.hover(trigger)
 
-		await waitFor(() => {
-			const presenceEl = canvasElement.querySelector('[data-scope="presence"]')
-			expect(presenceEl).toBeInTheDocument()
-		})
+			await waitFor(async () => {
+				await expect(trigger).toHaveAttribute('data-expanded')
+			})
 
-		await userEvent.unhover(trigger)
+			const content = await screen.findByRole('tooltip')
+			await waitFor(async () => {
+				await expect(content).toHaveAttribute('data-state', 'open')
+			})
 
-		await userEvent.hover(trigger)
-
-		await waitFor(
-			() => {
-				const presenceEl = canvasElement.querySelector(
-					'[data-scope="presence"]'
+			await waitFor(() => {
+				const started = onanimationstart.mock.calls.map(
+					([e]) => e.animationName
 				)
-				expect(presenceEl).toBeVisible()
-				expect(presenceEl).not.toHaveStyle({ display: 'none' })
-				expect(presenceEl).toHaveAttribute('data-state', 'open')
-			},
-			{ timeout: openDelay + MAX_EXTRA }
-		)
-
-		await userEvent.unhover(trigger)
-
-		await waitFor(
-			() => {
-				const presenceEl = canvasElement.querySelector(
-					'[data-scope="presence"]'
+				expect(started).toEqual(expect.arrayContaining(['slide-in', 'fade-in']))
+			})
+			await waitFor(async () => {
+				const ended = onanimationend.mock.calls.map(
+					([event]) => event.animationName
 				)
-				expect(presenceEl).toHaveStyle({ display: 'none' })
-				expect(presenceEl).toHaveAttribute('data-state', 'closed')
-			},
-			{ timeout: closeDelay + MAX_EXTRA }
-		)
+				await expect(ended).toEqual(
+					expect.arrayContaining(['slide-in', 'fade-in'])
+				)
+			})
+
+			onanimationstart.mockClear()
+			onanimationend.mockClear()
+
+			await userEvent.unhover(trigger)
+
+			await waitFor(async () => {
+				await expect(screen.queryByRole('tooltip')).toHaveAttribute(
+					'data-state',
+					'closed'
+				)
+			})
+
+			await waitFor(() => {
+				const started = onanimationstart.mock.calls.map(
+					([e]) => e.animationName
+				)
+				expect(started).toEqual(
+					expect.arrayContaining(['slide-out', 'fade-out'])
+				)
+			})
+			await waitFor(async () => {
+				const ended = onanimationend.mock.calls.map(
+					([event]) => event.animationName
+				)
+				await expect(
+					ended.some(n => n === 'slide-out' || n === 'fade-out')
+				).toBe(true)
+			})
+
+			await waitFor(async () => {
+				await expect(trigger).not.toHaveAttribute('data-expanded')
+			})
+
+			const closedContent = await screen.findByRole('tooltip', {
+				hidden: true
+			})
+			await waitFor(async () => await expect(closedContent).not.toBeVisible())
+
+			onanimationstart.mockClear()
+			onanimationend.mockClear()
+		} finally {
+			document.removeEventListener('animationstart', onanimationstart)
+			document.removeEventListener('animationend', onanimationend)
+		}
 	}
 }
