@@ -3,7 +3,7 @@ import {
 	type TooltipVariantProps,
 	tooltip
 } from '@iolita/styled-system/recipes'
-import { mergeProps, type PropTypes } from '@zag-js/react'
+import { mergeProps } from '@zag-js/react'
 import type * as zTooltip from '@zag-js/tooltip'
 import {
 	type ComponentPropsWithoutRef,
@@ -11,10 +11,14 @@ import {
 	type ReactNode
 } from 'react'
 import { Slot } from '../../utils/slot'
-import { type TooltipUserProps, useTooltip } from './use-tooltip'
+import {
+	type TooltipUserProps,
+	type UseTooltipReturn,
+	useTooltip
+} from './use-tooltip'
 import { TooltipProvider, useTooltipContext } from './use-tooltip-context'
 
-type RootProviderProps = zTooltip.Api<PropTypes> &
+type RootProviderProps = UseTooltipReturn &
 	TooltipVariantProps & { children: ReactNode }
 export function RootProvider({ children, ...props }: RootProviderProps) {
 	return <TooltipProvider {...props}>{children}</TooltipProvider>
@@ -119,3 +123,53 @@ export const ArrowTip = forwardRef<HTMLDivElement, ArrowTipProps>(
 	}
 )
 ArrowTip.displayName = 'Tooltip.ArrowTip'
+
+type ScrollAreaProps = ComponentPropsWithoutRef<'div'>
+export const ScrollArea = forwardRef<HTMLDivElement, ScrollAreaProps>(
+	(props, forwardedRef) => {
+		const { getScrollAreaProps } = useTooltipContext()
+		const { className, ...mergedProps } = mergeProps(
+			getScrollAreaProps(),
+			props
+		)
+		const { scrollArea } = tooltip()
+		const mergedClassName = cx(scrollArea, className)
+
+		return (
+			<div {...mergedProps} className={mergedClassName} ref={forwardedRef} />
+		)
+	}
+)
+ScrollArea.displayName = 'Tooltip.ScrollArea'
+
+type ScrollAreaViewportProps = ComponentPropsWithoutRef<'div'>
+export const ScrollAreaViewport = forwardRef<
+	HTMLDivElement,
+	ScrollAreaViewportProps
+>((props, forwardedRef) => {
+	const { getScrollAreaViewportProps } = useTooltipContext()
+	const { className, ...mergedProps } = mergeProps(
+		getScrollAreaViewportProps(),
+		props
+	)
+	const { scrollAreaViewport } = tooltip()
+	const mergedClassName = cx(scrollAreaViewport, className)
+
+	return <div {...mergedProps} className={mergedClassName} ref={forwardedRef} />
+})
+ScrollAreaViewport.displayName = 'Tooltip.ScrollAreaViewport'
+
+type BodyProps = ComponentPropsWithoutRef<'div'>
+export const Body = forwardRef<HTMLDivElement, BodyProps>(
+	(props, forwardedRef) => {
+		const { getBodyProps } = useTooltipContext()
+		const { className, ...mergedProps } = mergeProps(getBodyProps(), props)
+		const { body } = tooltip()
+		const mergedClassName = cx(body, className)
+
+		return (
+			<div {...mergedProps} className={mergedClassName} ref={forwardedRef} />
+		)
+	}
+)
+Body.displayName = 'Tooltip.Body'
