@@ -1,14 +1,20 @@
-import type { PropTypes } from '@zag-js/react'
-import type { Api } from '@zag-js/tooltip'
 import { createContext, type ReactNode, useContext } from 'react'
+import type { UseTooltipReturn } from './use-tooltip'
 
-export const TooltipContext = createContext({} as Api<PropTypes>)
+export type TooltipContextProps = UseTooltipReturn | null
+export const TooltipContext = createContext<TooltipContextProps>(null)
 
-type TooltipProviderProps = Api<PropTypes> & { children: ReactNode }
+type TooltipProviderProps = UseTooltipReturn & { children: ReactNode }
 export function TooltipProvider({ children, ...props }: TooltipProviderProps) {
 	return (
 		<TooltipContext.Provider value={props}>{children}</TooltipContext.Provider>
 	)
 }
 
-export const useTooltipContext = () => useContext(TooltipContext)
+export function useTooltipContext() {
+	const ctx = useContext(TooltipContext)
+	if (!ctx) {
+		throw new Error('useTooltipContext must be used within a TooltipProvider')
+	}
+	return ctx
+}

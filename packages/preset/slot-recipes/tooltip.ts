@@ -1,9 +1,15 @@
 import { defineSlotRecipe } from '@pandacss/dev'
 import { anatomy } from '@zag-js/tooltip'
 
+const extendedAnatomy = anatomy.extendWith(
+	'body',
+	'scrollArea',
+	'scrollAreaViewport'
+)
+
 export const tooltipSlotRecipe = defineSlotRecipe({
 	className: 'tooltip',
-	slots: anatomy.keys(),
+	slots: extendedAnatomy.keys(),
 	base: {
 		arrow: {
 			'--arrow-background': 'token(colors.violet.800)',
@@ -23,19 +29,31 @@ export const tooltipSlotRecipe = defineSlotRecipe({
 			borderInlineStartWidth: 'var(--arrow-tip-border-width, 1px)',
 			clipPath: 'polygon(0% 100%, 0% 0%, 100% 0%)'
 		},
-		content: {
-			position: 'relative',
-			overflow: 'auto',
-			maxWidth: 'var(--available-width)',
-			maxHeight: 'var(--available-height)',
-			boxShadow: 'md',
+		body: {
+			minWidth: 'min-content',
 			background: 'token(colors.violet.800)',
 			color: 'token(colors.white)',
-			textStyle: 'sm',
 			paddingInline: '2',
 			paddingBlock: '1'
 		},
+		content: {
+			position: 'relative',
+			boxShadow: 'md',
+			textStyle: 'sm',
+			borderRadius: 'var(--tooltip-border-radius, 0)'
+		},
 		positioner: {},
+		scrollArea: {
+			overflow: 'hidden',
+			contain: 'paint',
+			borderRadius: 'var(--tooltip-border-radius, 0)'
+		},
+		scrollAreaViewport: {
+			overflow: 'auto',
+			maxWidth: 'var(--available-width)',
+			maxHeight: 'var(--available-height)',
+			borderRadius: 'var(--tooltip-border-radius, 0)'
+		},
 		trigger: {}
 	}
 })
