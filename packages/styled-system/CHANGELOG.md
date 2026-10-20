@@ -1,5 +1,12 @@
 # @iolita/styled-system
 
+## 0.0.2
+
+### Patch Changes
+
+- Updated dependencies [[`a2103be`](https://github.com/die-goncalves/iolita/commit/a2103be08073cab7c740c32601eca512b491ec21)]:
+  - @iolita/preset@0.2.0
+
 ## 0.0.1
 
 ### Patch Changes
