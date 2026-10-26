@@ -15,6 +15,7 @@
 	"type": "module",
 	"dependencies": {
 		"@iolita/styled-system": "workspace:*",
+		"@zag-js/anatomy": "1.44.0",
 		"@zag-js/core": "^1.44.0",
 		"@zag-js/dialog": "^1.44.0",
 		"@zag-js/dismissable": "^1.44.0",
