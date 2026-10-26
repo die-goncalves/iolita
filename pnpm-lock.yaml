@@ -292,6 +292,9 @@ importers:
 
   packages/preset:
     dependencies:
+      '@zag-js/anatomy':
+        specifier: 1.44.0
+        version: 1.44.0
       '@zag-js/dialog':
         specifier: ^1.44.0
         version: 1.44.0
