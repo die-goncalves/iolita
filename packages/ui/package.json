@@ -23,6 +23,7 @@
 		"@zag-js/menu": "^1.44.0",
 		"@zag-js/popover": "^1.44.0",
 		"@zag-js/presence": "^1.44.0",
+		"@zag-js/radio-group": "1.44.0",
 		"@zag-js/react": "^1.44.0",
 		"@zag-js/tooltip": "^1.44.0",
 		"@zag-js/utils": "^1.44.0",
