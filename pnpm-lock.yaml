@@ -304,6 +304,9 @@ importers:
       '@zag-js/popover':
         specifier: ^1.44.0
         version: 1.44.0
+      '@zag-js/radio-group':
+        specifier: 1.44.0
+        version: 1.44.0
       '@zag-js/tooltip':
         specifier: ^1.44.0
         version: 1.44.0
@@ -1648,6 +1651,9 @@ packages:
 
   '@zag-js/presence@1.44.0':
     resolution: {integrity: sha512-8Xc35GDX9o7emuarazpF8bn7suub+37PUoaV/5pVfBrsSAGAJYzoZfXqXHvOguKFJlhQYnFHepiEiPQbmdmZvw==}
+
+  '@zag-js/radio-group@1.44.0':
+    resolution: {integrity: sha512-aSKAir9CoVdivX0KZNfEF/ZXHD9HBPIhnEyg+gHrrzOQg0+Uqj9/ubpf16TRKFjU+p7i1ZzRHi5KK19B52EzHg==}
 
   '@zag-js/react@1.44.0':
     resolution: {integrity: sha512-qRO5LJLzKuul97it+qYj/IrriS+IX9KZ7OrhCxPbY1Xd2g7TJdOpuGRU5IsGwTJCUfW6vQBrBj/0Qhc1GMClog==}
@@ -4586,6 +4592,15 @@ snapshots:
       '@zag-js/core': 1.44.0
       '@zag-js/dom-query': 1.44.0
       '@zag-js/types': 1.44.0
+
+  '@zag-js/radio-group@1.44.0':
+    dependencies:
+      '@zag-js/anatomy': 1.44.0
+      '@zag-js/core': 1.44.0
+      '@zag-js/dom-query': 1.44.0
+      '@zag-js/focus-visible': 1.44.0
+      '@zag-js/types': 1.44.0
+      '@zag-js/utils': 1.44.0
 
   '@zag-js/react@1.44.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)':
     dependencies:
