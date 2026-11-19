@@ -13,6 +13,7 @@
 	"type": "module",
 	"dependencies": {
 		"@zag-js/anatomy": "1.44.0",
+		"@zag-js/checkbox": "1.44.0",
 		"@zag-js/dialog": "^1.44.0",
 		"@zag-js/menu": "^1.44.0",
 		"@zag-js/popover": "^1.44.0",

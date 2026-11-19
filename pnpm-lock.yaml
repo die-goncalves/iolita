@@ -295,6 +295,9 @@ importers:
       '@zag-js/anatomy':
         specifier: 1.44.0
         version: 1.44.0
+      '@zag-js/checkbox':
+        specifier: 1.44.0
+        version: 1.44.0
       '@zag-js/dialog':
         specifier: ^1.44.0
         version: 1.44.0
@@ -1621,6 +1624,9 @@ packages:
 
   '@zag-js/aria-hidden@1.44.0':
     resolution: {integrity: sha512-sk9Zh93piT6NdXL0EW45fvhjrwSHjjPxeKOG+y68731Dqk0sdmP6/E1XQDwXiLhVLDySJ8PhGX8B7Zp+ZiZOIQ==}
+
+  '@zag-js/checkbox@1.44.0':
+    resolution: {integrity: sha512-2Tz2CroVmb8hT7nGknVbf4eW3UmDNZUrA2JoGYlAIQ8jJG3+lmxyFbO83o5RTh4oVeQiTsyn/V+jgLMS6V9z/g==}
 
   '@zag-js/core@1.44.0':
     resolution: {integrity: sha512-tqDBJeDpDuLfjodk6NetSDZLMy7+r799RcC5oDtVivowfSxfPBSsfh4UxYT/+zXv9RZ0mYG3TzO4yFROPmniIA==}
@@ -4518,6 +4524,15 @@ snapshots:
   '@zag-js/aria-hidden@1.44.0':
     dependencies:
       '@zag-js/dom-query': 1.44.0
+
+  '@zag-js/checkbox@1.44.0':
+    dependencies:
+      '@zag-js/anatomy': 1.44.0
+      '@zag-js/core': 1.44.0
+      '@zag-js/dom-query': 1.44.0
+      '@zag-js/focus-visible': 1.44.0
+      '@zag-js/types': 1.44.0
+      '@zag-js/utils': 1.44.0
 
   '@zag-js/core@1.44.0':
     dependencies:
