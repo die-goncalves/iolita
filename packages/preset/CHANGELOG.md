@@ -1,5 +1,101 @@
 # @iolita/preset
 
+## 0.2.0
+
+### Minor Changes
+
+- [#3](https://github.com/die-goncalves/iolita/pull/3) [`882d347`](https://github.com/die-goncalves/iolita/commit/882d347b4d4c464b9547ffff1c5da21e7febaefa) Thanks [@die-goncalves](https://github.com/die-goncalves)! - Added **Text Input** component for capturing user text input with support for labels, validation errors, and supporting text.
+  
+  - **Preset**: Added `text-input` slot recipe covering `root`, `label`, `input`, `supportingText`, and `errorText` parts.
+  - **UI**: Introduced component primitives (`Root`, `RootProvider`, `Label`, `Input`, `SupportingText`, `ErrorText`), styled via the preset recipe, with support for `disabled`, `read-only`, `required`, and `invalid` states, automatic `aria-describedby` wiring for descriptions and error texts, and accessible form control attributes.
+  
+    - `useTextInput`/`useTextInputContext` exposed for building custom compositions.
+    - `asChild` support on `SupportingText`.
+    - Conditional rendering of `ErrorText` only when `invalid` is true.
+    - Dynamic detection and linking of supporting text and error text via internal registration effects.
+  
+    ```tsx
+    <TextInput.Root>
+      <TextInput.Label>Label</TextInput.Label>
+      <TextInput.Input />
+      <TextInput.SupportingText>Some supporting text.</TextInput.SupportingText>
+      <TextInput.ErrorText>Some error text.</TextInput.ErrorText>
+    </TextInput.Root>
+    ```
+
+- [#1](https://github.com/die-goncalves/iolita/pull/1) [`a2103be`](https://github.com/die-goncalves/iolita/commit/a2103be08073cab7c740c32601eca512b491ec21) Thanks [@die-goncalves](https://github.com/die-goncalves)! - Added `Body`, `ScrollArea` and `ScrollAreaViewport` subcomponents for the **Tooltip** component, enabling structured layouts and scrollable content panels.
+  
+  - **Preset**: Added `body`, `scrollArea` and `scrollAreaViewport` slots to the `tooltip` slot recipe, with the corner radius configurable through `--tooltip-border-radius`. Background, text color and padding moved from `content` to `body`, and overflow handling moved to `scrollAreaViewport`.
+  - **UI**: Added `Tooltip.Body`, for the tooltip surface and padding, plus `Tooltip.ScrollArea` and `Tooltip.ScrollAreaViewport`, for scrolling content that exceeds the available space. `Tooltip.Content` no longer provides background or padding, so content must be wrapped in `Tooltip.Body`.
+  
+    ```tsx
+    <Tooltip.Root>
+      <Tooltip.Trigger>Tooltip</Tooltip.Trigger>
+      <Tooltip.Positioner>
+        <Tooltip.Content>
+          <Tooltip.Arrow>
+            <Tooltip.ArrowTip />
+          </Tooltip.Arrow>
+          <Tooltip.ScrollArea>
+            <Tooltip.ScrollAreaViewport>
+              <Tooltip.Body>Content</Tooltip.Body>
+            </Tooltip.ScrollAreaViewport>
+          </Tooltip.ScrollArea>
+        </Tooltip.Content>
+      </Tooltip.Positioner>
+    </Tooltip.Root>
+    ```
+
+- [#4](https://github.com/die-goncalves/iolita/pull/4) [`08076d0`](https://github.com/die-goncalves/iolita/commit/08076d0637d7400f4e809be7e8e83639603cca63) Thanks [@die-goncalves](https://github.com/die-goncalves)! - Added **RadioGroup** component for selecting a single option from a set of mutually exclusive choices.
+  
+  - **Preset**: Added `radio-group` slot recipe covering `root`, `label`, `item`, `itemControl`, `itemIndicator`, `itemText`, `supportingText`, and `errorText` parts.
+  - **UI**: Introduced component primitives (`Root`, `RootProvider`, `Label`, `Item`, `ItemControl`, `ItemIndicator`, `ItemText`, `ItemHiddenInput`, `SupportingText`, `ErrorText`), styled via the preset recipe, with support for keyboard navigation, states like `disabled`, `invalid`, and `readOnly`, automatic `aria-describedby` wiring for descriptions and error texts, and accessible form control attributes.
+  
+    - `useRadioGroup`/`useRadioGroupContext` exposed for building custom compositions.
+    - `asChild` support on `SupportingText`.
+    - Conditional rendering of `ErrorText` only when `invalid` is true.
+    - Dynamic detection and linking of supporting text and error text via internal registration effects.
+  
+    ```tsx
+    <RadioGroup.Root>
+      <RadioGroup.Label>Label</RadioGroup.Label>
+      <RadioGroup.Item value="option-1">
+        <RadioGroup.ItemHiddenInput />
+        <RadioGroup.ItemControl>
+          <RadioGroup.ItemIndicator />
+        </RadioGroup.ItemControl>
+        <RadioGroup.ItemText>Option 1</RadioGroup.ItemText>
+      </RadioGroup.Item>
+      <RadioGroup.SupportingText>Some supporting text.</RadioGroup.SupportingText>
+      <RadioGroup.ErrorText>Some error text.</RadioGroup.ErrorText>
+    </RadioGroup.Root>
+    ```
+
+- [#5](https://github.com/die-goncalves/iolita/pull/5) [`84eecda`](https://github.com/die-goncalves/iolita/commit/84eecda90dde8571e18c93f0268a391e5cf88fa4) Thanks [@die-goncalves](https://github.com/die-goncalves)! - Added **Checkbox** component for toggling binary options or selecting multiple values within a group.
+  
+  - **Preset**: Added `checkbox` slot recipe covering `root`, `control`, `indicator`, `label`, `group`, `groupLabel`, `groupSupportingText`, and `groupErrorText`.
+  - **UI**: Introduced component primitives (`Root`, `RootProvider`, `Control`, `Indicator`, `Label`, `HiddenInput`, `Group`, `GroupLabel`, `GroupSupportingText`, `GroupErrorText`), with support for `checked`, `indeterminate`, `disabled`, `invalid`, `readOnly`, and required states, controlled and uncontrolled multi-select groups via `Checkbox.Group`, and accessible group labeling and descriptions (`aria-labelledby` and `aria-describedby`).
+  
+    - `useCheckbox`/`useCheckboxContext` and `useCheckboxGroup`/`useCheckboxGroupContext` exposed for building custom compositions.
+    - `asChild` support on `GroupSupportingText`.
+    - Conditional rendering of `GroupErrorText` only when invalid is true.
+    - Dynamic detection and linking of group label, supporting text, and error text via internal registration effects.
+  
+    ```tsx
+    <Checkbox.Group>
+      <Checkbox.GroupLabel>Group Label</Checkbox.GroupLabel>
+      <Checkbox.Root value="option-1">
+        <Checkbox.HiddenInput />
+        <Checkbox.Control>
+          <Checkbox.Indicator />
+        </Checkbox.Control>
+        <Checkbox.Label>Option 1</Checkbox.Label>
+      </Checkbox.Root>
+      <Checkbox.GroupSupportingText>Some supporting text.</Checkbox.GroupSupportingText>
+      <Checkbox.GroupErrorText>Some error text.</Checkbox.GroupErrorText>
+    </Checkbox.Group>
+    ```
+
 ## 0.1.0
 
 ### Minor Changes
