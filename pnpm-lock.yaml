@@ -328,6 +328,9 @@ importers:
       '@zag-js/anatomy':
         specifier: 1.44.0
         version: 1.44.0
+      '@zag-js/checkbox':
+        specifier: 1.44.0
+        version: 1.44.0
       '@zag-js/core':
         specifier: ^1.44.0
         version: 1.44.0
